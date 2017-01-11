@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MobileServer>
+    <ServerSetup>
+        <MaxUserIdleTime>7200</MaxUserIdleTime>
+        <MaxUnloginIdleTime>10</MaxUnloginIdleTime>
+        <!-- Set the client queue size and the max allowed dropped packets -->
+        <ClientMessageQueue>
+            <QueueSize>80</QueueSize>
+            <MaxAllowedDroppedPackets>10</MaxAllowedDroppedPackets>
+        </ClientMessageQueue>
+        <MaxInMsgQueue>1500</MaxInMsgQueue>
+        <MaxOutMsgQueue>100</MaxOutMsgQueue>
+        <MaxMsgByteLen>1024</MaxMsgByteLen>
+        <DeadChannelsPolicy>strict</DeadChannelsPolicy>
+        <!-- Max connections per IP -->
+        <IpFilter>3000</IpFilter>
+        <NoLimitAddresses>
+            <Address>127.0.0.1</Address>
+        </NoLimitAddresses>
+        <!-- Administrator login -->
+        <AdminLogin>altraserver-admin</AdminLogin>
+        <AdminPassword>altraserver-whoami!</AdminPassword>
+        <!-- Allowed administrator IP addresses -->
+        <AdminAllowedAddresses>
+            <AllowedAddress>127.0.0.1</AllowedAddress>
+        </AdminAllowedAddresses>
+
+        <!-- 注入消息验证器 -->
+        <!-- 需实现IMessageValidator -->
+        <!-- 默认值为DefaultMessageValidator -->
+        <Validator>com.server.extensions.MyMessageValidator</Validator>
+        <!--<Validator>com.baitian.mobileserver.validator.DefaultMessageValidator</Validator>-->
+
+        <!-- 注入消息序列化工具 -->
+        <!-- 需实现IMessageCoder -->
+        <!-- 默认值为Amf3Coder -->
+        <MessageCoder>com.server.extensions.common.ProtobufCoder</MessageCoder>
+
+        <!-- 注入服务器组件（必填项） -->
+        <!-- 用于协助服务器工作 -->
+        <!-- 需实现IServerComponent -->
+        <ServerComponent>com.server.extensions.MyServerComponent</ServerComponent>
+    </ServerSetup>
+
+    <Extensions>
+        <!-- extensionId不可为0 -->
+        <extension id="3" name="BattleExtension" className="com.server.extensions.battle.BattleExtension"/>
+        <extension id="2" name="UserExtension" className="com.server.extensions.user.UserExtension"/>
+    </Extensions>
+</MobileServer>

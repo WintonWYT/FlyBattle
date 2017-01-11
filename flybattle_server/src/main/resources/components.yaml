@@ -1,0 +1,26 @@
+#系统组件，可以替换为自定义的clazzName，但是不可以删除
+#现在大部分组件是不可定制的
+#系统组件的name属性在com.baitian.mobileserver.component.SystemComponents中定义
+systemComponents:
+    - name: LogComponent
+      clazzName: com.baitian.mobileserver.component.LogComponent
+    - name: ConfigComponent
+      clazzName: com.baitian.mobileserver.component.ConfigComponent
+    - name: MsgCoderComponent
+      clazzName: com.baitian.mobileserver.component.MsgCoderComponent
+    - name: MsgValidatorComponent
+      clazzName: com.baitian.mobileserver.component.MsgValidatorComponent
+    - name: ExtensionComponent
+      clazzName: com.baitian.mobileserver.component.ExtensionComponent
+    - name: SocketComponent
+      clazzName: com.baitian.mobileserver.component.MinaSocketComponent
+    - name: MsScheduledExecutorComponent
+      clazzName: com.baitian.mobileserver.component.MsScheduledExecutorComponent
+    - name: InMsgWorkerComponent
+      clazzName: com.baitian.mobileserver.component.InMsgWorkerComponent
+    - name: OutMsgWorkerComponent
+      clazzName: com.baitian.mobileserver.component.OutMsgWorkerComponent
+#自定义组件，可用于初始化db、redis、RPC
+customComponents:
+    - name: TestCustomComponent
+      clazzName: com.baitian.mobileserver.component.TestCustomComponent

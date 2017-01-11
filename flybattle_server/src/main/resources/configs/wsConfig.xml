@@ -1,0 +1,16 @@
+<wsConfig>
+    <config>
+        <ServerSetup>
+            <ServerIP>127.0.0.1</ServerIP>
+            <ServerPort>9333</ServerPort>
+            <MaxUserCount>20000</MaxUserCount>
+            <InMsgWorkerThreads>10</InMsgWorkerThreads>
+            <OutMsgWorkerThreads>3</OutMsgWorkerThreads>
+            <ScheduledExecutorThreads>5</ScheduledExecutorThreads>
+            <EnableProfile>true</EnableProfile>
+            <EnableMsgLengthDebug>true</EnableMsgLengthDebug>
+            <EnableBigEndian>true</EnableBigEndian>
+        </ServerSetup>
+    </config>
+    <zone id="1"/>
+</wsConfig>

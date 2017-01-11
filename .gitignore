@@ -1,0 +1,22 @@
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+
+# Intellij project files
+*.iml
+.idea/
+
+# Others
+target/
+logs/
+*.log
+out/
+
+#deploy
+/*/configs
+/*/javaExtensions/
+/*/jars/
+*.tgz
+*.tar.gz

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exConfig>
+    <applicationInfo>
+        <appName value="socket" />
+        <dbDriver value="com.mysql.jdbc.Driver" />
+        <mainConnectionString value="jdbc:mysql://10.18.20.56/flygameas?autoReconnect=true&amp;user=flygame&amp;password=000000" />
+        <usePlainText value="true" />
+    </applicationInfo>
+    <zone id = "1"/>
+</exConfig>
