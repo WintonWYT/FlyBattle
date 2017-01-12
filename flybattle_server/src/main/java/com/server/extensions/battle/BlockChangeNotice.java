@@ -1,5 +1,7 @@
 package com.server.extensions.battle;
 
+import com.server.extensions.config.GameConfig;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +13,7 @@ public enum BlockChangeNotice {
     INSTANCE;
     private int size = 100;
     //时间单位为秒
-    private static final long BUILD_TIME = 5;
+    private static final long BUILD_TIME = GameConfig.BLOCK_RESET_TIME;
     private ScheduledExecutorService noticeService = Executors.newScheduledThreadPool(size);
 
     public void noticeBlockChange(int roomId, EnergyBlock energyBlock) {

@@ -3,16 +3,14 @@ package com.server.extensions.battle;
 import com.server.extensions.config.GameConfig;
 import com.server.protobuf.Vec3;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /**
  * Created by wuyingtan on 2017/1/9.
  */
 public class BlockPool {
-    private Map<Integer, EnergyBlock> eBlockList = new ConcurrentHashMap<>();
+    private Map<Integer, EnergyBlock> eBlockList = new HashMap<>();
+    //random类是否有怪异的表现待观察
     private Random random = new Random();
     private int length;
     private int weight;
@@ -49,7 +47,7 @@ public class BlockPool {
         return new Vec3(x, y, z);
     }
 
-    public void updateBlock(int eid) {
+    public synchronized void updateBlock(int eid) {
         EnergyBlock energyBlock = eBlockList.get(eid);
         if (energyBlock.isUsed()) {
             return;
@@ -61,7 +59,9 @@ public class BlockPool {
     }
 
     public List<EnergyBlock> getAllBlcok() {
-        return (List<EnergyBlock>) eBlockList.values();
+        List<EnergyBlock> result = new ArrayList<>();
+        eBlockList.values().stream().filter(block -> !block.isUsed()).forEach(block -> result.add(block));
+        return result;
     }
 
 }

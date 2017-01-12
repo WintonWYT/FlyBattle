@@ -5,6 +5,7 @@ import com.server.protobuf.Vec3;
 /**
  * Created by wuyingtan on 2017/1/9.
  */
+//能量块状态的逻辑需要实时同步
 public class EnergyBlock {
     private int eid;
     private Vec3 pos;

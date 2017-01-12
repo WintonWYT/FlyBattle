@@ -12,11 +12,12 @@ public class GameConfig {
     public static final int BLOCK_WEIGHT = 500;
     public static final int BLOCK_HEIGHT = 500;
     public static final int BLOCK_NUM = 500;
-    public static final Integer GAME_HP = 200;
+    public static final int GAME_HP = 200;
     public static final int BLOCK_EXP_NUM = 30;
     public static final int BLOCK_HP_NUM = 100;
     public static final int BLOCK_TOOL_NUM = 100;
     public static final int BLOCK_EXP_CODE = 1;
     public static final int BLOCK_HP_CODE = 2;
     public static final int BLOCK_TOOL_CODE = 3;
+    public static final long BLOCK_RESET_TIME = 5;
 }

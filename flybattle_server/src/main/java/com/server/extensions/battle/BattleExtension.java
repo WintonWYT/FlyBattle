@@ -132,11 +132,7 @@ public class BattleExtension extends ExtensionSupport {
         AccelaerateResp resp = new AccelaerateResp();
         resp.speed = req.speed;
         resp.uid = user.getUid();
-        if (userList.size() == 0) {
-            return;
-        }
-        List<User> users = getUserListById(userList);
-        ExtensionHelper.sendResponse(users, EXTENSION_ID, ACCE_RESP, resp);
+        sendMultiResponse(userList, ACCE_RESP, resp);
     }
 
     @Command(CHANGE_BULLECT_REQ)
@@ -149,11 +145,15 @@ public class BattleExtension extends ExtensionSupport {
         ChangeBullectResp resp = new ChangeBullectResp();
         resp.bullectType = req.bullectType;
         resp.uid = uid;
-        if (userList.size() == 0) {
+        sendMultiResponse(userList, CHANGE_BULLECT_RESP, resp);
+    }
+
+    private static void sendMultiResponse(List<Long> userIdList, byte cmd, Object resp) {
+        if (userIdList.size() == 0) {
             return;
         }
-        List<User> users = getUserListById(userList);
-        ExtensionHelper.sendResponse(users, EXTENSION_ID, CHANGE_BULLECT_RESP, resp);
+        List<User> users = getUserListById(userIdList);
+        ExtensionHelper.sendResponse(users, EXTENSION_ID, cmd, resp);
     }
 
     @Command(LEVEL_CHANGE_REQ)
@@ -164,17 +164,12 @@ public class BattleExtension extends ExtensionSupport {
         LevelChangeResp resp = new LevelChangeResp();
         resp.level = req.level;
         resp.uid = user.getUid();
-        if (userList.size() == 0) {
-            return;
-        }
-        List<User> users = getUserListById(userList);
-        ExtensionHelper.sendResponse(users, EXTENSION_ID, LEVEL_CHANGE_RESP, resp);
+        sendMultiResponse(userList, LEVEL_CHANGE_RESP, resp);
     }
 
     @Command(USER_ABSORB_BLOCK)
     public void handleUserAbsorbBlock(User user, UpdateBlockReq req) {
         int roomId = user.getRoomId();
-        long userId = user.getUserId();
         int eid = req.eid;
         BattlefieldManager.INSTANCE.updateEnergyBlock(roomId, eid);
     }
@@ -188,11 +183,7 @@ public class BattleExtension extends ExtensionSupport {
     }
 
     public void SendSyncAttack(List<Long> userList, AttackResp resp) {
-        if (userList.size() == 0) {
-            return;
-        }
-        List<User> users = getUserListById(userList);
-        ExtensionHelper.sendResponse(users, EXTENSION_ID, SYNC_ATTACK_RESP, resp);
+        sendMultiResponse(userList, SYNC_ATTACK_RESP, resp);
     }
 
     public static void sendSyncPosition(Long userId, SyncResp resp) {
@@ -201,19 +192,11 @@ public class BattleExtension extends ExtensionSupport {
     }
 
     public static void sendUserJoinRoom(List<Long> userList, PlayerInfo createPlayerInfo) {
-        if (userList.size() == 0) {
-            return;
-        }
-        List<User> users = getUserListById(userList);
-        ExtensionHelper.sendResponse(users, EXTENSION_ID, USER_JOIN_ROOM, new PlayerEnterResp(createPlayerInfo));
+        sendMultiResponse(userList, USER_JOIN_ROOM, new PlayerEnterResp(createPlayerInfo));
     }
 
     public static void sendUserLeaveRoom(List<Long> userList, int exitUid) {
-        if (userList.size() == 0) {
-            return;
-        }
-        List<User> users = getUserListById(userList);
-        ExtensionHelper.sendResponse(users, EXTENSION_ID, USER_LEAVE_ROOM, new PlayerExitResp(exitUid));
+        sendMultiResponse(userList, USER_LEAVE_ROOM, new PlayerExitResp(exitUid));
     }
 
     public void sendJoinRoomResp(User user, EnterBattleResp response) {

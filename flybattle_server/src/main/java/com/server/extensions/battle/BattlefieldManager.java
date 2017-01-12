@@ -36,7 +36,7 @@ public enum BattlefieldManager {
     private Vec3 initPosition() {
         Vec3 pos = new Vec3();
         pos.x = x;
-        x = x + 20;
+        x = x + 10;
         pos.y = 50;
         pos.z = 50;
         return pos;

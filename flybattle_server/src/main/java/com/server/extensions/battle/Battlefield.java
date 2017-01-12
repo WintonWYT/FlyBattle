@@ -35,6 +35,7 @@ public class Battlefield extends Thread {
 
     private AtomicBoolean isRun = new AtomicBoolean(false);
 
+    //能量块池
     private BlockPool energyBlockPood;
 
     public Battlefield(int fieldId) {
@@ -146,7 +147,7 @@ public class Battlefield extends Thread {
             SyncResp response = new SyncResp();
             response.playerSynInfos = getSyncInfo(uid, damageInfos);
 
-            //待改
+            //待改,可以考虑抽象一个借口
             BattleExtension.sendSyncPosition(userId, response);
         }
 
@@ -163,7 +164,7 @@ public class Battlefield extends Thread {
             synInfo.uid = id;
             Position position = objcetId2Postion.get(id);
             synInfo.pos = position.pos;
-            //待定
+            //尚未接收到同步信息时的dir为空
             if (position.dir == null) {
                 position.dir = new Vec3();
             }
@@ -176,11 +177,7 @@ public class Battlefield extends Thread {
 
     private List<Integer> getDemage(int uid, List<DamageInfo> damageInfos) {
         List<Integer> infos = new ArrayList<>();
-        for (DamageInfo info : damageInfos) {
-            if (info.uid == uid) {
-                infos.add(info.reduceHp);
-            }
-        }
+        damageInfos.stream().filter(info -> info.uid == uid).forEach(info -> infos.add(info.reduceHp));
         return infos;
     }
 
@@ -214,6 +211,7 @@ public class Battlefield extends Thread {
         return otherUserList;
     }
 
+    //此方法是线程安全的
     public void addDamageInfo(DamageInfo damageInfo) {
         int hp = uid2Hp.get(damageInfo.uid);
         uid2Hp.put(damageInfo.uid, hp - damageInfo.reduceHp);
@@ -226,19 +224,15 @@ public class Battlefield extends Thread {
     }
 
     public void setBullectType(int uid, int bullectType) {
-        for (PlayerInfo info : userInfo) {
-            if (info.uid == uid) {
-                info.bulletType = bullectType;
-            }
-        }
+        userInfo.stream().filter(info -> info.uid == uid).forEach(info -> info.bulletType = bullectType);
     }
 
     public void updateEnergyBlcok(int eid) {
+        //此方法是线程安全的
         energyBlockPood.updateBlock(eid);
     }
 
     public List<EnergyBlock> getAllBlcok() {
-        List<EnergyBlock> energyBlocks = energyBlockPood.getAllBlcok();
-        return energyBlocks;
+        return energyBlockPood.getAllBlcok();
     }
 }
