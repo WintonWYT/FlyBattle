@@ -1,6 +1,5 @@
 package com.flybattle.battle.core;
 
-import com.flybattle.battle.domain.BattleInfo;
 import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.domain.UserBattle;
 import com.flybattle.battle.server.ChannelManager;
@@ -69,9 +68,9 @@ public class BattleCenter {
         UserBattle user = UserBattleManager.INSTANCE.getUserBattle(uid);
         Vec3 pos = req.myInfo.pos;
         Vec3 dir = req.myInfo.dir;
-        int speed = req.myInfo.speed;
-        BattleInfo info = new BattleInfo(pos, dir, speed);
-        BattleManager.INSTANCE.updatePosition(user.getRoomId(), uid, info);
+        //int speed = req.myInfo.speed;
+        //BattleInfo info = new BattleInfo(pos, dir, speed);
+        // BattleManager.INSTANCE.updatePosition(user.getRoomId(), uid, info);
     }
 
     @Command(OpCode.SYNC_DEMAGE_REQ)

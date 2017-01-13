@@ -167,9 +167,9 @@ public class Battlefield extends Thread {
                 position.dir = new Vec3();
             }
             if (position.speed != 0) {
-                synInfo.speed = position.speed;
+                //synInfo.speed = position.speed;
             }
-            synInfo.bulletType = po
+            //synInfo.bulletType = po
             synInfo.dir = position.dir;
             synInfo.damage = getDemage(id, damageInfos);
             infos.add(synInfo);

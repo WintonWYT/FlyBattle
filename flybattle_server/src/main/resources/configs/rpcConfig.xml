@@ -1,0 +1,42 @@
+<!--
+	setting desc
+
+	<registry>zookeeper://127.0.0.1:2181</registry>
+	registry：注册中心地址zookeeper://XXX.XXX.XXX.XXX:xxx
+
+	<services port="80" protocol="HTTP" numWorkers="32" requestTimeoutMillis="15000">
+	port：只需要配置一个端口port即可
+	protocol：rpc的协议，有多种选择HTTP or HTTPS
+	numWorkers：服务器工作线程数，默认跟本机CPUs数相关，可以不设置
+	requestTimeoutMillis: 请求处理超时默认为15s，可以不设置
+
+	<service serviceName="matchService" serialization="THRIFT_BINARY"
+			iface="com.aola.app.dto.match.IRmiArena" implName="com.aola.app.service.arena.MatchService" />
+	serviceName：服务名字，如果不设置，会使用接口类名
+	serialization：此服务请求的序列化方式，	THRIFT_BINARY...（LINK com.baitian.rpc.server.Serialization.java）
+	iface：服务接口类完整类名，如果不设置会使用实现类的第一个接口类名
+	implName：服务具体实现类名
+
+	<serviceDetailConfig parseClz="">
+				<top name="BestIndBAMade" topnum="500" desc="true" stable="true" />
+			</serviceDetailConfig>
+	service特别的配置
+	parseClz：特殊配置的解释类名必须继承接口 IAppServiceDetailConfigReader
+
+	<applicationInfo>：数据库的配置
+ -->
+<app>
+    <registry>zookeeper://127.0.0.1:2181</registry>
+    <services port="8099" protocol="HTTP">
+        <service serialization="THRIFT_BINARY" iface="flygame.rpc.Iface.ITest$Iface"
+                 implName="com.server.extensions.rpc.service.TestServiceImpl"/>
+    </services>
+
+    <applicationInfo>
+        <appName value="app"/>
+        <dbDriver value="com.mysql.jdbc.Driver"/>
+        <mainConnectionString
+                value="jdbc:mysql://10.17.1.118/rpgas?autoReconnect=true&amp;user=aola&amp;password=aola"/>
+        <usePlainText value="true"/>
+    </applicationInfo>
+</app>

@@ -52,7 +52,7 @@ public class BattleHandlerTest {
                 try {
                     SyncResp resp = (SyncResp) code.decode(bytes);
                     for (PlayerSynInfo playerSynInfo : resp.playerSynInfos) {
-                        System.out.println("uid:" + playerSynInfo.uid + " ,speed:" + playerSynInfo.speed);
+                        // System.out.println("uid:" + playerSynInfo.uid + " ,speed:" + playerSynInfo.speed);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

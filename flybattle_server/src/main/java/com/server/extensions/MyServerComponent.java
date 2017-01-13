@@ -6,6 +6,7 @@ import com.baitian.mobileserver.servercomponent.LoginResult;
 import com.baitian.mobileserver.util.ServerConfig;
 import com.server.extensions.common.LoginText;
 import com.server.extensions.config.ExtConfig;
+import com.server.extensions.rpc.server.RpcServiceServer;
 import com.server.extensions.user.User;
 import com.server.extensions.user.UserManager;
 import com.server.protobuf.response.LoginResp;
@@ -16,11 +17,13 @@ import com.server.protobuf.response.LoginResp;
 public class MyServerComponent implements IServerComponent {
 
     public void init(String[] strings) {
+
         try {
             ExtConfig.instance().init();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        RpcServiceServer.INSTANCE.startService();
     }
 
     public void beforeExtensionInit() {
