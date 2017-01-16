@@ -8,13 +8,8 @@ import com.flybattle.battle.util.CommandHandler;
 import com.server.protobuf.DamageInfo;
 import com.server.protobuf.PlayerInfo;
 import com.server.protobuf.Vec3;
-import com.server.protobuf.request.AttackReq;
-import com.server.protobuf.request.DamageReq;
-import com.server.protobuf.request.SyncReq;
-import com.server.protobuf.response.AttackResp;
-import com.server.protobuf.response.EnterBattleResp;
-import com.server.protobuf.response.PlayerEnterResp;
-import com.server.protobuf.response.SyncResp;
+import com.server.protobuf.request.*;
+import com.server.protobuf.response.*;
 
 import java.util.List;
 
@@ -92,7 +87,47 @@ public class BattleCenter {
         UserBattleManager.INSTANCE.removeUserBattle(uid);
         senLeaveRoomResp(uid);
         sendUserLeaveRoom(uidList);
+    }
 
+    @Command(OpCode.ACCE_REQ)
+    public void handleAccelerate(AccelerateReq req) {
+        int uid = req.uid;
+        UserBattle user = UserBattleManager.INSTANCE.getUserBattle(uid);
+        List<Integer> otherUidList = BattleManager.INSTANCE.getOtherUidList(user.getRoomId(), uid);
+        AccelaerateResp resp = new AccelaerateResp();
+        resp.speed = req.speed;
+        resp.uid = uid;
+        ChannelManager.INSTANCE.sendResponse(otherUidList, OpCode.ACCE_RESP, resp);
+    }
+
+    @Command(OpCode.CHANGE_BULLECT_REQ)
+    public void handleBullectChange(ChangeBullectReq req) {
+        int uid = req.uid;
+        UserBattle user = UserBattleManager.INSTANCE.getUserBattle(uid);
+
+        BattleManager.INSTANCE.setBullectType(user.getRoomId(), uid, req.bullectType);
+        List<Integer> otherUidList = BattleManager.INSTANCE.getOtherUidList(user.getRoomId(), uid);
+
+        ChangeBullectResp resp = new ChangeBullectResp();
+        resp.bullectType = req.bullectType;
+        resp.uid = uid;
+
+        ChannelManager.INSTANCE.sendResponse(otherUidList, OpCode.CHANGE_BULLECT_RESP, resp);
+    }
+
+    @Command(OpCode.LEVEL_CHANGE_REQ)
+    public void handleLevelChange(LevelChangeReq req) {
+        int uid = req.uid;
+        UserBattle user = UserBattleManager.INSTANCE.getUserBattle(uid);
+
+        BattleManager.INSTANCE.setLevel(user.getRoomId(), uid, req.level);
+        List<Integer> otherUidList = BattleManager.INSTANCE.getOtherUidList(user.getRoomId(), uid);
+
+        LevelChangeResp resp = new LevelChangeResp();
+        resp.uid = uid;
+        resp.level = req.level;
+
+        ChannelManager.INSTANCE.sendResponse(otherUidList, OpCode.LEVEL_CHANGE_RESP, resp);
     }
 
     public void sendJoinRoomResp(int uid, EnterBattleResp resp) {

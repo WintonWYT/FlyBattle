@@ -1,7 +1,7 @@
 package com.flybattle.battle.core;
 
 import com.flybattle.battle.domain.BattleInfo;
-import com.flybattle.battle.util.BattleConfig;
+import com.flybattle.battle.util.BattlefieldConfig;
 import com.server.protobuf.PlayerInfo;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 public enum BattlefieldPool {
     INSTANCE;
     //设置最大大小
-    private final static int MAX_SIZE = BattleConfig.MAX_ROOM_SIZE;
+    private final static int MAX_SIZE = BattlefieldConfig.MAX_ROOM_SIZE;
     //池的大小
     private int size = 0;
     //可使用的roomId

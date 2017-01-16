@@ -26,5 +26,21 @@ public class OpCode {
     public static final int SYNC_ATTACK_RESP = 310;
     //玩家伤害同步请求
     public static final int SYNC_DEMAGE_REQ = 311;
+    //玩家加速请求
+    public static final int ACCE_REQ = 312;
+    //玩家加速返回
+    public static final int ACCE_RESP = 313;
+    //玩家子弹变更请求
+    public static final int CHANGE_BULLECT_REQ = 314;
+    //玩家子弹变更返回
+    public static final int CHANGE_BULLECT_RESP = 315;
+    //玩家等级变更请求
+    public static final int LEVEL_CHANGE_REQ = 316;
+    //玩家等级变更返回
+    public static final int LEVEL_CHANGE_RESP = 317;
+    //玩家吸收能量块请求
+    public static final int USER_ABSORB_BLOCK = 318;
+    //能量块位置更新响应
+    public static final int UPDATE_BLOCK_POS = 319;
 
 }

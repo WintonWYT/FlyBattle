@@ -160,6 +160,9 @@ public class BattleExtension extends ExtensionSupport {
     public void handleLevelChange(User user, LevelChangeReq req) {
         int roomId = user.getRoomId();
         long userId = user.getUserId();
+        int uid = user.getUid();
+
+        BattlefieldManager.INSTANCE.setLevel(roomId, uid, req.level);
         List<Long> userList = BattlefieldManager.INSTANCE.getOtherPlayerIdList(roomId, userId);
         LevelChangeResp resp = new LevelChangeResp();
         resp.level = req.level;

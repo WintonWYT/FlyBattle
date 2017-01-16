@@ -87,6 +87,14 @@ public enum BattlefieldManager {
         room.setBullectType(uid, bullectType);
     }
 
+    public void setLevel(int roomId, int uid, int level) {
+        Battlefield room = battlefieldPool.getRoomById(roomId);
+        if (room == null) {
+            return;
+        }
+        room.setLevel(uid, level);
+    }
+
     public void addDamageInfo(int roomId, DamageInfo info) {
         Battlefield room = battlefieldPool.getRoomById(roomId);
         if (room == null) {

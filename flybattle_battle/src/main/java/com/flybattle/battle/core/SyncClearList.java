@@ -45,7 +45,6 @@ public class SyncClearList<T> {
         lock.lock();
         try {
             if (!dataList.isEmpty()) {
-
                 res.addAll(dataList);
                 dataList.clear();
             }

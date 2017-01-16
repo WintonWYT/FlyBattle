@@ -1,7 +1,9 @@
 package com.flybattle.battle.block;
 
+import com.flybattle.battle.util.BattlefieldConfig;
 import com.server.protobuf.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -16,34 +18,53 @@ public class BlockPool {
     private int length;
     private int weight;
     private int height;
+    private int roomId;
 
-    public BlockPool(int length, int weight, int height, int num) {
-        this.length = length;
-        this.weight = weight;
-        this.height = height;
+    public BlockPool(int roomId) {
+        this.roomId = roomId;
+        this.length = BattlefieldConfig.BLOCK_LENGTH;
+        this.weight = BattlefieldConfig.BLOCK_WEIGHT;
+        this.height = BattlefieldConfig.BLOCK_HEIGHT;
+        int expNum = BattlefieldConfig.BLOCK_EXP_NUM;
+        int hpNum = BattlefieldConfig.BLOCK_HP_NUM;
+        int num = BattlefieldConfig.BLOCK_NUM;
         for (int i = 0; i < num; i++) {
-            Vec3 pos = getVec3(length, weight, height);
+            Vec3 pos = nextBlockPosition(length, weight, height);
             EnergyBlock energyBlock = new EnergyBlock(i, pos);
+            if (i < expNum) {
+                energyBlock.setType(BattlefieldConfig.BLOCK_EXP_CODE);
+            } else if (i < expNum + hpNum) {
+                energyBlock.setType(BattlefieldConfig.BLOCK_HP_CODE);
+            } else {
+                energyBlock.setType(BattlefieldConfig.BLOCK_TOOL_CODE);
+            }
             eBlockList.put(i, energyBlock);
         }
     }
 
-    private Vec3 getVec3(int length, int weight, int height) {
+    private Vec3 nextBlockPosition(int length, int weight, int height) {
         float x = random.nextInt(length);
         float y = random.nextInt(weight);
         float z = random.nextInt(height);
         return new Vec3(x, y, z);
     }
 
-    public EnergyBlock updateBlock(int eid) {
-        Vec3 newPos = getVec3(length, weight, height);
+
+    public synchronized void updateBlock(int eid) {
         EnergyBlock energyBlock = eBlockList.get(eid);
+        if (energyBlock.isUsed()) {
+            return;
+        }
+        Vec3 newPos = nextBlockPosition(length, weight, height);
         energyBlock.setPos(newPos);
-        return energyBlock;
+        energyBlock.setIsUsed(true);
+        BlockChangeNotice.INSTANCE.noticeBlockChange(roomId, energyBlock);
     }
 
-    public List<EnergyBlock> getAllInfo() {
-        return (List<EnergyBlock>) eBlockList.values();
+    public List<EnergyBlock> getAllBlock() {
+        List<EnergyBlock> result = new ArrayList<>();
+        eBlockList.values().stream().filter(block -> !block.isUsed()).forEach(block -> result.add(block));
+        return result;
     }
 
 }

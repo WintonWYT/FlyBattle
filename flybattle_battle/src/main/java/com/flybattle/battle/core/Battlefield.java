@@ -3,8 +3,7 @@ package com.flybattle.battle.core;
 import com.flybattle.battle.block.BlockPool;
 import com.flybattle.battle.block.EnergyBlock;
 import com.flybattle.battle.domain.BattleInfo;
-import com.flybattle.battle.util.BattleConfig;
-import com.server.extensions.config.GameConfig;
+import com.flybattle.battle.util.BattlefieldConfig;
 import com.server.protobuf.DamageInfo;
 import com.server.protobuf.PlayerInfo;
 import com.server.protobuf.PlayerSynInfo;
@@ -30,19 +29,24 @@ public class Battlefield extends Thread {
     //存储用户信息
     private List<PlayerInfo> userInfo = new ArrayList<>();
     //最大用户量配置
-    private static final int maxRoomSize = BattleConfig.MAX_ROOM_USER_SIZE;
+    private static final int maxRoomSize = BattlefieldConfig.MAX_ROOM_USER_SIZE;
     //用户伤害数据存储
     private SyncClearList<DamageInfo> damageList = new SyncClearList<>();
 
-    private Map<Integer, BattleInfo> objcetId2Postion = new ConcurrentHashMap<>();
+    //用户血量
+    private Map<Integer, Integer> uid2Hp = new ConcurrentHashMap<>();
 
-    //能量块
-    private BlockPool blockPool = new BlockPool(GameConfig.BLOCK_LENGTH, GameConfig.BLOCK_WEIGHT, GameConfig.BLOCK_HEIGHT, GameConfig.BLOCK_NUM);
+    private Map<Integer, BattleInfo> objcetId2Postion = new ConcurrentHashMap<>();
 
     private AtomicBoolean isRun = new AtomicBoolean(false);
 
+    //能量块
+    private BlockPool energyBlockPood;
+
+
     public Battlefield(int fieldId) {
         this.fieldId = fieldId;
+        this.energyBlockPood = new BlockPool(fieldId);
     }
 
 
@@ -89,6 +93,7 @@ public class Battlefield extends Thread {
         PlayerInfo playerInfo = new PlayerInfo(uid, userName, pos.pos);
         userInfo.add(playerInfo);
         userUid.add(uid);
+        uid2Hp.put(uid, BattlefieldConfig.GAME_HP);
         return uid;
     }
 
@@ -166,10 +171,7 @@ public class Battlefield extends Thread {
             if (position.dir == null) {
                 position.dir = new Vec3();
             }
-            if (position.speed != 0) {
-                //synInfo.speed = position.speed;
-            }
-            //synInfo.bulletType = po
+
             synInfo.dir = position.dir;
             synInfo.damage = getDemage(id, damageInfos);
             infos.add(synInfo);
@@ -179,11 +181,7 @@ public class Battlefield extends Thread {
 
     private List<Integer> getDemage(int uid, List<DamageInfo> damageInfos) {
         List<Integer> infos = new ArrayList<>();
-        for (DamageInfo info : damageInfos) {
-            if (info.uid == uid) {
-                infos.add(info.reduceHp);
-            }
-        }
+        damageInfos.stream().filter(info -> info.uid == uid).forEach(info -> infos.add(info.reduceHp));
         return infos;
     }
 
@@ -199,6 +197,7 @@ public class Battlefield extends Thread {
             if (player.uid == uid) {
                 continue;
             }
+
             otherPlayers.add(player);
         }
         return otherPlayers;
@@ -211,13 +210,32 @@ public class Battlefield extends Thread {
         return list;
     }
 
+    //此方法是线程安全的
     public void addDamageInfo(DamageInfo damageInfo) {
+        int hp = uid2Hp.get(damageInfo.uid);
+        uid2Hp.put(damageInfo.uid, hp - damageInfo.reduceHp);
         damageList.add(damageInfo);
     }
 
-    public EnergyBlock updateEnergyBlock(int eid) {
-        EnergyBlock energyBlock = blockPool.updateBlock(eid);
-        return energyBlock;
+    public void updateEnergyBlcok(int eid) {
+        //此方法是线程安全的
+        energyBlockPood.updateBlock(eid);
     }
 
+    public List<EnergyBlock> getAllBlcok() {
+        return energyBlockPood.getAllBlock();
+    }
+
+    public List<Integer> getAllUid() {
+        List<Integer> uidList = new ArrayList<>(userUid);
+        return uidList;
+    }
+
+    public void setBullectType(int uid, int bullectType) {
+        userInfo.stream().filter(info -> info.uid == uid).forEach(info -> info.bulletType = bullectType);
+    }
+
+    public void setLevel(int uid, int level) {
+        userInfo.stream().filter(info -> info.uid == uid).forEach(info -> info.level = level);
+    }
 }

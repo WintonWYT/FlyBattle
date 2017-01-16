@@ -227,6 +227,10 @@ public class Battlefield extends Thread {
         userInfo.stream().filter(info -> info.uid == uid).forEach(info -> info.bulletType = bullectType);
     }
 
+    public void setLevel(int uid, int level) {
+        userInfo.stream().filter(info -> info.uid == uid).forEach(info -> info.level = level);
+    }
+
     public void updateEnergyBlcok(int eid) {
         //此方法是线程安全的
         energyBlockPood.updateBlock(eid);
