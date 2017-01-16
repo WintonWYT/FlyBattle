@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 关闭xsi元素验证，防止无法获取网络文件-->
+<!--<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">-->
+<!-- <!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">-->
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}][%-5p][%t] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.StringMatchFilter">
+            <param name="StringToMatch" value="rmi:Gametop-"/>
+            <param name="AcceptOnMatch" value="false"/>
+        </filter>
+    </appender>
+
+    <appender name="DEBUG" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/debug/debug"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}][%t] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG"/>
+            <param name="LevelMax" value="DEBUG"/>
+        </filter>
+    </appender>
+
+    <appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/info/info"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}][%t] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+            <param name="LevelMax" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="WARN" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/warn/warn"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}][%t] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="WARN"/>
+            <!--<param name="LevelMax" value="WARN" />-->
+        </filter>
+    </appender>
+
+    <appender name="PROF" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="logs/prof/prof"/>
+        <param name="MaxFileSize" value="200MB"/>
+        <param name="Append" value="true"/>
+        <param name="MaxBackupIndex" value="100"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="PROF_MSGLEN" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="logs/prof/msglen"/>
+        <param name="MaxFileSize" value="200MB"/>
+        <param name="Append" value="true"/>
+        <param name="MaxBackupIndex" value="100"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}]%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="SERVER_STAT" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/prof/stat"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss}%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="PLUG" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/plug/plug"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}]-%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="SQL" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/sql/sql"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}][%t] - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="BEHAVIOR" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/behavior/behavior"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <appender name="ANTIPLUG" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="logs/antiplug/antiplug"/>
+        <param name="DatePattern" value="'_'yyyy-MM-dd'.log'"/>
+        <param name="Append" value="true"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{HH:mm:ss}]-%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+        </filter>
+    </appender>
+
+    <category name="BattleServerLogger" additivity='false'>
+        <priority value="ALL"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="DEBUG"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="WARN"/>
+    </category>
+
+</log4j:configuration>

@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public enum ChannelManager {
     INSTANCE;
+    Logger log = LoggerFactory.getLogger(this.getClass());
     AttributeKey<Integer> key = AttributeKey.newInstance("uid");
     private Map<Integer, ChannelHandlerContext> uid2Channel = new ConcurrentHashMap<>();
 
@@ -23,9 +26,6 @@ public enum ChannelManager {
         uid2Channel.put(uid, ctx);
     }
 
-//    public ChannelHandlerContext getChannel(int uid) {
-//        return uid2Channel.get(uid);
-//    }
 
     public void removeChannel(ChannelHandlerContext ctx) {
         int uid = ctx.attr(key).get();

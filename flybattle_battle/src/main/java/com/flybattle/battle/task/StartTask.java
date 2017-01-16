@@ -3,6 +3,7 @@ package com.flybattle.battle.task;
 import com.flybattle.battle.core.BattleCenter;
 import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.server.ChannelManager;
+import com.flybattle.battle.util.BattleLogger;
 import com.flybattle.battle.util.CommandData;
 import com.flybattle.battle.util.CommandHandler;
 import com.flybattle.battle.util.ProtobufCoder;
@@ -37,7 +38,7 @@ public class StartTask implements ITask {
             ChannelManager.INSTANCE.addChannel(playerInfo.uid, ctx);
             ChannelManager.INSTANCE.sendResponse(playerInfo.uid, OpCode.JOIN_ROOM_RESP, resp);
         } catch (Exception e) {
-            e.printStackTrace();
+            BattleLogger.error("join room Task error", e);
         }
 
     }

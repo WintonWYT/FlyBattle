@@ -1,6 +1,7 @@
 package com.flybattle.battle.task;
 
 import com.flybattle.battle.core.BattleCenter;
+import com.flybattle.battle.util.BattleLogger;
 import com.flybattle.battle.util.CommandData;
 import com.flybattle.battle.util.CommandHandler;
 import com.flybattle.battle.util.ProtobufCoder;
@@ -25,7 +26,7 @@ public class OpCodeTask implements ITask {
             CommandData cd = CommandHandler.INSTANCE.getCommandData(opCode);
             cd.method.invoke(BattleCenter.getInstance(), object);
         } catch (Exception e) {
-            e.printStackTrace();
+            BattleLogger.error("opCode task error", e);
         }
     }
 }

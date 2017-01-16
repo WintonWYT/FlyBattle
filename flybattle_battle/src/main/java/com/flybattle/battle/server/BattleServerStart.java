@@ -1,6 +1,9 @@
 package com.flybattle.battle.server;
 
 import com.flybattle.battle.core.BattleCenter;
+import com.flybattle.battle.util.BattleConfig;
+import com.flybattle.battle.util.BattleLogger;
+import com.flybattle.battle.util.LogUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -24,6 +27,7 @@ public class BattleServerStart {
 
     private void init() {
         BattleCenter.getInstance();
+        LogUtil.initLogger();
     }
 
 
@@ -42,13 +46,15 @@ public class BattleServerStart {
                     }
                 });
         try {
-            ChannelFuture channelFuture = bootstrap.bind("10.18.20.56", 9090).sync();
+            ChannelFuture channelFuture = bootstrap.bind(BattleConfig.SERVER_IP, BattleConfig.SERVER_PORT).sync();
+            BattleLogger.info("Battle Server is now running!");
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            BattleLogger.error("battle server failed to start!", e);
         } finally {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
+            BattleLogger.info("Battle Server shutdown!");
         }
     }
 

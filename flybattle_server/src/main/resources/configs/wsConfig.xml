@@ -4,10 +4,10 @@
             <ServerIP>127.0.0.1</ServerIP>
             <ServerPort>9333</ServerPort>
             <MaxUserCount>20000</MaxUserCount>
-            <InMsgWorkerThreads>100</InMsgWorkerThreads>
-            <OutMsgWorkerThreads>60</OutMsgWorkerThreads>
-            <ScheduledExecutorThreads>50</ScheduledExecutorThreads>
-            <EnableProfile>true</EnableProfile>
+            <InMsgWorkerThreads>10</InMsgWorkerThreads>
+            <OutMsgWorkerThreads>3</OutMsgWorkerThreads>
+            <ScheduledExecutorThreads>5</ScheduledExecutorThreads>
+            <EnableProfile>false</EnableProfile>
             <EnableMsgLengthDebug>true</EnableMsgLengthDebug>
             <EnableBigEndian>true</EnableBigEndian>
         </ServerSetup>

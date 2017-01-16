@@ -2,6 +2,7 @@ package com.flybattle.battle.server;
 
 import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.task.TaskDispatcher;
+import com.flybattle.battle.util.BattleLogger;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,7 +18,7 @@ public class BattleHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         ctx.fireChannelActive();
-        System.out.println("welcome  " + ctx.channel().remoteAddress());
+        BattleLogger.info("Ip:" + ctx.channel().remoteAddress() + "  login");
     }
 
     @Override
@@ -63,7 +64,7 @@ public class BattleHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         ctx.fireChannelInactive();
-        System.out.println(ctx.channel().remoteAddress() + " leave");
+        BattleLogger.info(ctx.channel().remoteAddress() + "  leave");
         ChannelManager.INSTANCE.removeChannel(ctx);
     }
 

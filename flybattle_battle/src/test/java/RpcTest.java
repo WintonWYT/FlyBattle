@@ -1,5 +1,5 @@
-import com.flybattle.battle.rpc.client.RpcClientFactory;
 import flygame.rpc.Iface.ITest;
+import flygame.rpc.client.RpcClientFactory;
 import org.apache.thrift.TException;
 
 /**
