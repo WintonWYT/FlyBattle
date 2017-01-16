@@ -9,7 +9,7 @@
             <MaxAllowedDroppedPackets>10</MaxAllowedDroppedPackets>
         </ClientMessageQueue>
         <MaxInMsgQueue>1500</MaxInMsgQueue>
-        <MaxOutMsgQueue>100</MaxOutMsgQueue>
+        <MaxOutMsgQueue>800</MaxOutMsgQueue>
         <MaxMsgByteLen>1024</MaxMsgByteLen>
         <DeadChannelsPolicy>strict</DeadChannelsPolicy>
         <!-- Max connections per IP -->
@@ -44,7 +44,8 @@
 
     <Extensions>
         <!-- extensionId不可为0 -->
-        <extension id="3" name="BattleExtension" className="com.server.extensions.battle.BattleExtension"/>
         <extension id="2" name="UserExtension" className="com.server.extensions.user.UserExtension"/>
+        <extension id="3" name="BattleExtension" className="com.server.extensions.battle.BattleExtension"/>
+
     </Extensions>
 </MobileServer>

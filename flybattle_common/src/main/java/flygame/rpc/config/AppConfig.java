@@ -21,8 +21,6 @@ public class AppConfig {
 
     private static final Logger LOG = LoggerFactory.getLogger(AppConfig.class);
 
-    private static String CONFIG_FILE = "RpcConfig.xml";
-
     private String registry;
 
     private int port;

@@ -46,8 +46,9 @@ public enum RpcServiceServer {
                 serverBuilder.serviceAt(service.getServiceName(), Class.forName(service.getIface()), Class.forName(service.getImplClzName()).newInstance(),
                         Serialization.valueOf(service.getSerialization()));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
+
         });
         if (StringUtils.isEmpty(registry)) {
             throw new RuntimeException("no registry info! plz check!");

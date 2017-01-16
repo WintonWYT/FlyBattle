@@ -21,22 +21,13 @@ public class ExtConfig {
     private static ExtConfig instance;
     private static String exConfigFile = "exConfig.xml";
     private static String wsConfigFile = "wsConfig.xml";
-
-    private boolean openFilter;
-    //private List<FilterConfig> filterConfigList;
-
+    
     private ServerConfig serverConfig;
     private int zoneId;
-    private int localRmiPort;
 
     private ExtConfig() {
-        //if (ConfigData.PATH_CONFIG_XML.length() > 0) {
-        //exConfigFile = new StringBuilder(ConfigData.PATH_CONFIG_XML).append("/").append(exConfigFile).toString();
-        //this.getClass().getResource("/configs/wsConfig.xml").getPath();
         wsConfigFile = new StringBuilder(ConfigData.PATH_CONFIG_XML).append("/").append(wsConfigFile).toString();
         exConfigFile = new StringBuilder(ConfigData.PATH_CONFIG_XML).append("/").append(exConfigFile).toString();
-
-        //}
     }
 
     public static ExtConfig instance() {
@@ -50,27 +41,9 @@ public class ExtConfig {
 //        this.zoneId = Integer.parseInt(args[0]);
         Element extElement = loadExConfigElement();
         ConfReaderFactory.createConfigReader(extElement); // init DbManager config
-        //  Element filterElement = (Element) extElement.getElementsByTagName("filters").item(0);
-        //  this.loadFilterConfig(filterElement);
         this.loadServerConfig();
     }
 
-//    private void loadFilterConfig(Element filterElement) throws Exception {
-//        String open = filterElement.getAttribute("open");
-//        this.openFilter = Boolean.parseBoolean(open);
-//
-//        NodeList nodeList = filterElement.getElementsByTagName("filter");
-//        this.filterConfigList = new ArrayList<>(nodeList.getLength());
-//        for (int i = 0; i < nodeList.getLength(); i++) {
-//            Element filterNode = (Element) nodeList.item(i);
-//            String className = filterNode.getAttribute("className");
-//            int seconds = getInt(filterNode.getAttribute("seconds"), 0);
-//            int capacity = getInt(filterNode.getAttribute("capacity"), 0);
-//            FilterConfig filterConfig = new FilterConfig(className, seconds, capacity);
-//            filterConfig.initCls();
-//            filterConfigList.add(filterConfig);
-//        }
-//    }
 
     private void loadServerConfig() {
         Document wsConfig = loadCfgFile(wsConfigFile);
@@ -122,13 +95,6 @@ public class ExtConfig {
         return ConfigData.PATH_CONFIG_XML;
     }
 
-    public boolean isOpenFilter() {
-        return openFilter;
-    }
-
-//    public List<FilterConfig> getFilterConfigList() {
-//        return filterConfigList;
-//    }
 
     public int getZoneId() {
         return zoneId;
@@ -138,7 +104,4 @@ public class ExtConfig {
         return serverConfig;
     }
 
-    public int getLocalRmiPort() {
-        return localRmiPort;
-    }
 }

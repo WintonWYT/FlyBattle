@@ -1,4 +1,4 @@
-package com.server.extensions.common;
+package com.server.extensions;
 
 import com.baidu.bjf.remoting.protobuf.Codec;
 import com.baidu.bjf.remoting.protobuf.ProtobufProxy;

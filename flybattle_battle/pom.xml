@@ -21,11 +21,7 @@
             <artifactId>jprotobuf</artifactId>
             <version>2.0.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.fly</groupId>
-            <artifactId>flybattle_common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+
         <dependency>
             <groupId>com.fly</groupId>
             <artifactId>flybattle_server</artifactId>

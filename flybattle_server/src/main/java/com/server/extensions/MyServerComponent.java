@@ -1,5 +1,6 @@
 package com.server.extensions;
 
+import com.baitian.mobileserver.logger.ServerLogger;
 import com.baitian.mobileserver.request.LoginRequest;
 import com.baitian.mobileserver.servercomponent.IServerComponent;
 import com.baitian.mobileserver.servercomponent.LoginResult;
@@ -16,36 +17,42 @@ import com.server.protobuf.response.LoginResp;
  */
 public class MyServerComponent implements IServerComponent {
 
+    @Override
     public void init(String[] strings) {
-
         try {
             ExtConfig.instance().init();
         } catch (Exception e) {
-            e.printStackTrace();
+            ServerLogger.error("<<MyServerComponent>> ExConfig init error", e);
         }
-        RpcServiceServer.INSTANCE.startService();
+
     }
 
+    @Override
     public void beforeExtensionInit() {
 
     }
 
+    @Override
     public void afterExtensionInit() {
-
+        RpcServiceServer.INSTANCE.startService();
     }
 
+    @Override
     public void beforeExtensionDestory() {
 
     }
 
+    @Override
     public void afterExtensionDestory() {
 
     }
 
+    @Override
     public void afterServerStartup() {
 
     }
 
+    @Override
     public LoginResult doLogin(LoginRequest loginRequest) {
         long userId = Long.parseLong(loginRequest.getAccount());
         String passWord = loginRequest.getPassword();
@@ -61,12 +68,14 @@ public class MyServerComponent implements IServerComponent {
         return new LoginResult(false, LoginText.PASSWORD_WORING, null);
     }
 
+    @Override
     public long getUserId(LoginRequest loginRequest) {
 //        long aLong = Long.parseLong(loginRequest.getAccount());
 //        return aLong;
         return 0;
     }
 
+    @Override
     public ServerConfig getServerConfig() {
         return ExtConfig.instance().getServerConfig();
     }

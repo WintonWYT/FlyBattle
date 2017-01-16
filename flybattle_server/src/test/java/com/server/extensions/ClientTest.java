@@ -2,7 +2,6 @@ package com.server.extensions;
 
 import com.baitian.mobileserver.buffer.IoBuffer;
 import com.baitian.mobileserver.util.MsgConstants;
-import com.server.extensions.common.ClientMessageCoder;
 import com.server.protobuf.response.ResultResp;
 import com.server.protobuf.response.SyncResp;
 import com.server.util.ClientMessageCoderTest;
