@@ -4,13 +4,13 @@ import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.task.TaskDispatcher;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
  * Created by wuyingtan on 2017/1/4.
  */
-public class BattleHandler extends ChannelHandlerAdapter {
+public class BattleHandler extends ChannelInboundHandlerAdapter {
 
     public static final int MSG_HEAD_LEN = 4;
 

@@ -13,7 +13,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>5.0.0.Alpha2</version>
+            <version>4.1.4.final</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.baidu/jprotobuf -->
         <dependency>
@@ -30,12 +30,6 @@
             <groupId>com.fly</groupId>
             <artifactId>flybattle_server</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.netty</groupId>
-                    <artifactId>netty-all</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>

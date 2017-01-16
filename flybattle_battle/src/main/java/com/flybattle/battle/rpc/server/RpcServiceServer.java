@@ -18,15 +18,16 @@ public enum RpcServiceServer {
     RpcServerBuilder serverBuilder = new RpcServerBuilder();
     RpcServer server;
     String registry;
+    AppConfig appConfig;
 
     public void init() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        AppConfig instance = AppConfig.instance("configs/rpcConfig.xml", classLoader);
-        registry = instance.getRegistry();
-        int port = instance.getPort();
-        String protocol = instance.getProtocol();
-        int numWorkers = instance.getNumWorkers();
-        int requestTimeoutMillis = instance.getRequestTimeoutMillis();
+        appConfig = AppConfig.instance("configs/rpcConfig.xml", classLoader);
+        registry = appConfig.getRegistry();
+        int port = appConfig.getPort();
+        String protocol = appConfig.getProtocol();
+        int numWorkers = appConfig.getNumWorkers();
+        int requestTimeoutMillis = appConfig.getRequestTimeoutMillis();
         serverBuilder.port(port, Protocol.valueOf(protocol));
         if (numWorkers != 0) {
             serverBuilder.numWorkers(numWorkers);
@@ -38,9 +39,7 @@ public enum RpcServiceServer {
 
     public void start() {
         List<AppServicesInfo> appServices;
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        AppConfig instance = AppConfig.instance("configs/rpcConfig.xml", classLoader);
-        appServices = instance.getAppServicesInfo();
+        appServices = appConfig.getAppServicesInfo();
 
         appServices.forEach(service -> {
             try {

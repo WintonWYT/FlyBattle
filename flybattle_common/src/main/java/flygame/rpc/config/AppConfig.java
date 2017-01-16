@@ -100,9 +100,6 @@ public class AppConfig {
     }
 
     private Document loadCfgFile(String cfgFile, ClassLoader classLoader) {
-
-        //ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-
         Document dom = null;
 
         File f;

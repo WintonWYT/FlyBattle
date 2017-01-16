@@ -27,7 +27,7 @@
  -->
 <app>
     <registry>zookeeper://127.0.0.1:2181</registry>
-    <services port="8099" protocol="HTTP">
+    <services port="8099" protocol="HTTP" requestTimeoutMillis="20000">
         <service serialization="THRIFT_BINARY" iface="flygame.rpc.Iface.ITest$Iface"
                  implName="com.server.extensions.rpc.service.TestServiceImpl"/>
     </services>
