@@ -5,21 +5,22 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by wuyingtan on 2017/1/5.
  */
 public enum ChannelManager {
     INSTANCE;
-    Logger log = LoggerFactory.getLogger(this.getClass());
     AttributeKey<Integer> key = AttributeKey.newInstance("uid");
     private Map<Integer, ChannelHandlerContext> uid2Channel = new ConcurrentHashMap<>();
+    private ExecutorService executor = Executors.newFixedThreadPool(200);
+
 
     public void addChannel(int uid, ChannelHandlerContext ctx) {
         ctx.attr(key).set(uid);
@@ -33,11 +34,13 @@ public enum ChannelManager {
     }
 
     public void sendResponse(int uid, int opCode, Object object) {
-        ByteBuf buf = getByteBuf(opCode, object);
-        ChannelHandlerContext ctx = uid2Channel.get(uid);
-        if (ctx != null) {
-            ctx.writeAndFlush(buf);
-        }
+        executor.execute(() -> {
+            ByteBuf buf = getByteBuf(opCode, object);
+            ChannelHandlerContext ctx = uid2Channel.get(uid);
+            if (ctx != null) {
+                ctx.writeAndFlush(buf);
+            }
+        });
     }
 
     private ByteBuf getByteBuf(int opCode, Object object) {
@@ -55,11 +58,13 @@ public enum ChannelManager {
         if (uidList.size() == 0) {
             return;
         }
-        ByteBuf buf = getByteBuf(opCode, object);
-        for (int uid : uidList) {
-            ChannelHandlerContext ctx = uid2Channel.get(uid);
-            ctx.writeAndFlush(buf);
-        }
+        executor.execute(() -> {
+            ByteBuf buf = getByteBuf(opCode, object);
+            for (int uid : uidList) {
+                ChannelHandlerContext ctx = uid2Channel.get(uid);
+                ctx.writeAndFlush(buf);
+            }
+        });
     }
 
 }

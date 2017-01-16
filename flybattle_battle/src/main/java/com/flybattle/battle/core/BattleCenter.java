@@ -1,5 +1,6 @@
 package com.flybattle.battle.core;
 
+import com.flybattle.battle.domain.BattleInfo;
 import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.domain.UserBattle;
 import com.flybattle.battle.server.ChannelManager;
@@ -29,7 +30,7 @@ public class BattleCenter {
 
     @Command(OpCode.JOIN_ROOM_REQ)
     public EnterBattleResp handleJoinRoom(PlayerInfo info) {
-        String uname = "xxx";
+        String uname = info.uname;
         info = BattleManager.INSTANCE.joinRoom(uname);
         UserBattle userBattle = new UserBattle();
         userBattle.setUid(info.uid);
@@ -40,7 +41,7 @@ public class BattleCenter {
         EnterBattleResp resp = new EnterBattleResp();
         resp.myInfo = info;
         resp.otherInfo = BattleManager.INSTANCE.getOtherPlayerInfoList(info.roomId, info.uid);
-        //sendJoinRoomResp(info.uid, resp);
+        resp.energyBlockInfo = BattleManager.INSTANCE.getAllEnergyBlock(info.roomId);
         List<Integer> uidList = BattleManager.INSTANCE.getOtherUidList(info.roomId, info.uid);
         sendUserJoinRoom(uidList, info);
         return resp;
@@ -54,7 +55,7 @@ public class BattleCenter {
         List<Integer> uidList = BattleManager.INSTANCE.getOtherUidList(user.getRoomId(), user.getUid());
         AttackResp resp = new AttackResp();
         resp.info = req.info;
-        sendSyncAttack(uidList);
+        sendSyncAttack(uidList, resp);
     }
 
     @Command(OpCode.SYNC_BATTLE_REQ)
@@ -63,9 +64,8 @@ public class BattleCenter {
         UserBattle user = UserBattleManager.INSTANCE.getUserBattle(uid);
         Vec3 pos = req.myInfo.pos;
         Vec3 dir = req.myInfo.dir;
-        //int speed = req.myInfo.speed;
-        //BattleInfo info = new BattleInfo(pos, dir, speed);
-        // BattleManager.INSTANCE.updatePosition(user.getRoomId(), uid, info);
+        BattleInfo info = new BattleInfo(pos, dir);
+        BattleManager.INSTANCE.updatePosition(user.getRoomId(), uid, info);
     }
 
     @Command(OpCode.SYNC_DEMAGE_REQ)
@@ -86,7 +86,7 @@ public class BattleCenter {
         BattleManager.INSTANCE.leaveRoom(roomId, uid);
         UserBattleManager.INSTANCE.removeUserBattle(uid);
         senLeaveRoomResp(uid);
-        sendUserLeaveRoom(uidList);
+        sendUserLeaveRoom(uidList, uid);
     }
 
     @Command(OpCode.ACCE_REQ)
@@ -130,9 +130,6 @@ public class BattleCenter {
         ChannelManager.INSTANCE.sendResponse(otherUidList, OpCode.LEVEL_CHANGE_RESP, resp);
     }
 
-    public void sendJoinRoomResp(int uid, EnterBattleResp resp) {
-        ChannelManager.INSTANCE.sendResponse(uid, OpCode.JOIN_ROOM_RESP, resp);
-    }
 
     public void senLeaveRoomResp(int uid) {
         ChannelManager.INSTANCE.sendResponse(uid, OpCode.LEAVE_ROOM_RESP, null);
@@ -142,12 +139,12 @@ public class BattleCenter {
         ChannelManager.INSTANCE.sendResponse(uidList, OpCode.USER_JOIN_ROOM, new PlayerEnterResp(info));
     }
 
-    public void sendUserLeaveRoom(List<Integer> uidList) {
-        ChannelManager.INSTANCE.sendResponse(uidList, OpCode.USER_LEAVE_ROOM, null);
+    public void sendUserLeaveRoom(List<Integer> uidList, int exitUid) {
+        ChannelManager.INSTANCE.sendResponse(uidList, OpCode.USER_LEAVE_ROOM, new PlayerExitResp(exitUid));
     }
 
-    public static void sendSyncAttack(List<Integer> uidList) {
-        ChannelManager.INSTANCE.sendResponse(uidList, OpCode.SYNC_ATTACK_RESP, null);
+    public static void sendSyncAttack(List<Integer> uidList, AttackResp resp) {
+        ChannelManager.INSTANCE.sendResponse(uidList, OpCode.SYNC_ATTACK_RESP, resp);
     }
 
     public static void sendSyncPosition(int uid, SyncResp response) {

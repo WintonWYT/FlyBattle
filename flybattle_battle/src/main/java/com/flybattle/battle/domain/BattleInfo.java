@@ -13,7 +13,7 @@ public class BattleInfo {
     public BattleInfo(Vec3 pos, Vec3 dir, int speed) {
         this.pos = pos;
         this.dir = dir;
-        this.speed = speed;
+        //this.speed = speed;
     }
 
     public BattleInfo(Vec3 pos, Vec3 dir) {

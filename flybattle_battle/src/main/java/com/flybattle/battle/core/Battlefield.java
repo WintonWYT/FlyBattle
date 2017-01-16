@@ -197,7 +197,7 @@ public class Battlefield extends Thread {
             if (player.uid == uid) {
                 continue;
             }
-
+            player.curHp = uid2Hp.get(player.uid);
             otherPlayers.add(player);
         }
         return otherPlayers;

@@ -24,5 +24,6 @@ public enum BlockChangeNotice {
     private void sendBlockNotice(int roomId, EnergyBlock energyBlock) {
         energyBlock.setIsUsed(false);
         //todo 添加返回信息
+
     }
 }
