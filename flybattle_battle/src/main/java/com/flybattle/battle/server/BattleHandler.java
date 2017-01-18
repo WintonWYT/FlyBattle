@@ -24,33 +24,13 @@ public class BattleHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
-        if (buf.readableBytes() < 4) {
-            return;
-        }
-        int size = buf.readInt();
-        boolean hasSizeBytes = true;
-        while (buf.readableBytes() >= size) {
-            hasSizeBytes = false;
-            demultiplexAndDispatch(size, buf, ctx);
-            if (buf.readableBytes() < 4) {
-                break;
-            } else {
-                size = buf.readInt();
-                hasSizeBytes = true;
-            }
-        }
-
-        if (hasSizeBytes) {
-            buf.readerIndex(buf.readerIndex() - MSG_HEAD_LEN);
-        }
-
+        demultiplexAndDispatch(buf, ctx);
     }
 
-    private void demultiplexAndDispatch(int size, ByteBuf buf, ChannelHandlerContext ctx) {
-        final int netSize = size - MSG_HEAD_LEN;
+    private void demultiplexAndDispatch(ByteBuf buf, ChannelHandlerContext ctx) {
         int opCode = buf.readInt();
         ByteBuf newBuf = Unpooled.buffer();
-        newBuf.writeBytes(buf, netSize);
+        newBuf.writeBytes(buf);
         switch (opCode) {
             case OpCode.JOIN_ROOM_REQ:
                 TaskDispatcher.handleFirstJoin(opCode, newBuf, ctx);

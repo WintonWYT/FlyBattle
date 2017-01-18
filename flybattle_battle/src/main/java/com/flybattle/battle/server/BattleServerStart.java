@@ -42,6 +42,7 @@ public class BattleServerStart {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(new MsgDecoder());
                         ch.pipeline().addLast(new BattleHandler());
                     }
                 });

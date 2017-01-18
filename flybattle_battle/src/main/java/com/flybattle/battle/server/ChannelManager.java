@@ -62,7 +62,9 @@ public enum ChannelManager {
             ByteBuf buf = getByteBuf(opCode, object);
             for (int uid : uidList) {
                 ChannelHandlerContext ctx = uid2Channel.get(uid);
-                ctx.writeAndFlush(buf);
+                if (ctx != null) {
+                    ctx.writeAndFlush(buf);
+                }
             }
         });
     }
