@@ -22,8 +22,7 @@ public class MsgDecoder extends ByteToMessageDecoder {
         boolean hasSizeBytes = true;
         while (in.readableBytes() >= size) {
             hasSizeBytes = false;
-            ByteBuf result = Unpooled.buffer(size + 4);
-            in.readerIndex(in.readerIndex());
+            ByteBuf result = Unpooled.buffer(size);
             in.readBytes(result, size);
             out.add(result);
             if (in.readableBytes() < 4) {
