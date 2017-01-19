@@ -113,7 +113,6 @@ public class Battlefield extends Thread {
 
     /**
      * 添加物体
-     * 非线程安全，需要注意
      *
      * @param pos
      * @return uid

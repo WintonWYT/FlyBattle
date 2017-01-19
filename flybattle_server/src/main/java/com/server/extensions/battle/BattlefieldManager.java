@@ -1,19 +1,12 @@
 package com.server.extensions.battle;
 
-import com.server.extensions.config.GameConfig;
 import com.server.protobuf.DamageInfo;
 import com.server.protobuf.EnergyBlockInfo;
 import com.server.protobuf.PlayerInfo;
 import com.server.protobuf.Vec3;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wuyingtan on 2016/12/8.
@@ -21,12 +14,10 @@ import java.util.concurrent.TimeUnit;
 public enum BattlefieldManager {
     INSTANCE;
     private BattlefieldPool battlefieldPool = BattlefieldPool.INSTANCE;
-    private final Map<Integer, Future> battleFuture = new HashMap<>();
-    private final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(GameConfig.MAX_BATTLE_SIZE);
+
     private int x = 50;
 
-    //有同步问题
-    public synchronized PlayerInfo joinRoom(long userId, String userName) {
+    public PlayerInfo joinRoom(long userId, String userName) {
         Vec3 pos = initPosition();
         Position position = new Position(pos, null);
         PlayerInfo playInfo = battlefieldPool.joinRoom(userId, userName, position);
@@ -112,34 +103,19 @@ public enum BattlefieldManager {
         return otherUserIds;
     }
 
-    public synchronized void leaveRoom(int roomId, long userId, int uid) {
+    public void leaveRoom(int roomId, long userId, int uid) {
         battlefieldPool.leaveRoom(roomId, userId, uid);
     }
 
 
     public void updatePosition(int roomId, int uid, Position pos) {
-        if (battlefieldPool.isEmpty()) {
+
+        Battlefield room = battlefieldPool.getRoomById(roomId);
+        if (room == null) {
             return;
         }
-        Battlefield room = battlefieldPool.getRoomById(roomId);
         room.updatePosition(uid, pos);
     }
 
-
-    public boolean startBattle(int roomId) {
-        Battlefield room = battlefieldPool.getRoomById(roomId);
-        if (room.beginSend()) {
-            Future future = scheduledService.scheduleAtFixedRate(room, 0, GameConfig.BATTLE_SYNC_TIME, TimeUnit.MILLISECONDS);
-            battleFuture.put(roomId, future);
-            return true;
-        }
-        return false;
-    }
-
-    public void endBattle(int roomId) {
-        Battlefield room = battlefieldPool.getRoomById(roomId);
-        room.stopSend();
-        battleFuture.get(roomId).cancel(true);
-    }
 
 }

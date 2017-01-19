@@ -111,10 +111,10 @@ public enum BattleManager {
 
 
     public void updatePosition(int roomId, int uid, BattleInfo pos) {
-        if (battlefieldPool.isEmpty()) {
+        Battlefield room = battlefieldPool.getRoomById(roomId);
+        if (room == null) {
             return;
         }
-        Battlefield room = battlefieldPool.getRoomById(roomId);
         room.updatePosition(uid, pos);
     }
 

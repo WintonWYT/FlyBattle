@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by wuyingtan on 2017/1/5.
  */
+//todo id的回收部分可以优化
 public enum BattlefieldPool {
     INSTANCE;
     //设置最大大小
@@ -22,12 +23,12 @@ public enum BattlefieldPool {
     //可使用的roomId
     private final LinkedList<Integer> freeRoomId = new LinkedList<>();
     //可使用的room
-    private final LinkedList<Battlefield> roomFreeList = new LinkedList<>();
+    private final LinkedList<Battlefield> freeRoomList = new LinkedList<>();
     //所有的room
     private final List<Battlefield> roomAllList = new ArrayList<>();
 
     private final Map<Integer, Future> battleFuture = new HashMap<>();
-    
+
     private final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(BattlefieldConfig.MAX_BATTLE_SIZE);
 
     public synchronized PlayerInfo joinRoom(String userName, BattleInfo pos) {
@@ -38,8 +39,10 @@ public enum BattlefieldPool {
         info.roomId = toJoin.getFieldId();
         info.uname = userName;
         info.pos = pos.pos;
+
+
         if (toJoin.isFull()) {
-            roomFreeList.remove(toJoin);
+            freeRoomList.remove(toJoin);
         }
         //开始战斗
         if (!toJoin.isStart()) {
@@ -52,14 +55,15 @@ public enum BattlefieldPool {
         Battlefield room = roomAllList.get(roomId);
         room.removeUserObject(uid);
         if (room.isEmpty()) {
+            //结束战斗
             endBattle(roomId);
             roomAllList.remove(room);
-            roomFreeList.remove(room);
+            freeRoomList.remove(room);
             freeRoomId.add(room.getFieldId());
             return;
         }
-        if (!roomFreeList.contains(room)) {
-            roomFreeList.add(room);
+        if (!freeRoomList.contains(room)) {
+            freeRoomList.add(room);
         }
     }
 
@@ -72,15 +76,15 @@ public enum BattlefieldPool {
 
     private Battlefield getValidRoom() {
         Battlefield room;
-        if (roomFreeList.size() == 0) {
+        if (freeRoomList.size() == 0) {
             creatRoom();
         }
-        room = roomFreeList.getFirst();
+        room = freeRoomList.getFirst();
         return room;
     }
 
 
-    public synchronized boolean isEmpty() {
+    private boolean isEmpty() {
         if (roomAllList.size() == 0) {
             return true;
         }
@@ -92,7 +96,6 @@ public enum BattlefieldPool {
         if (freeRoomId.size() == 0) {
             roomId = size;
             size++;
-            //待处理
             if (size > MAX_SIZE) {
                 return;
             }
@@ -101,7 +104,7 @@ public enum BattlefieldPool {
         }
         Battlefield room = new Battlefield(roomId);
         roomAllList.add(room);
-        roomFreeList.add(room);
+        freeRoomList.add(room);
     }
 
 

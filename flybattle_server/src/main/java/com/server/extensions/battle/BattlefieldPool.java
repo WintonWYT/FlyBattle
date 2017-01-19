@@ -3,9 +3,11 @@ package com.server.extensions.battle;
 import com.server.extensions.config.GameConfig;
 import com.server.protobuf.PlayerInfo;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wuyingtan on 2016/12/22.
@@ -24,7 +26,10 @@ public enum BattlefieldPool {
     //所有的room
     private final List<Battlefield> roomAllList = new ArrayList<>();
 
-    public PlayerInfo joinRoom(long userId, String userName, Position pos) {
+    private final Map<Integer, Future> battleFuture = new HashMap<>();
+    private final ScheduledExecutorService scheduledService = Executors.newScheduledThreadPool(GameConfig.MAX_BATTLE_SIZE);
+
+    public synchronized PlayerInfo joinRoom(long userId, String userName, Position pos) {
         Battlefield toJoin = getValidRoom();
 
         PlayerInfo info = new PlayerInfo();
@@ -37,16 +42,16 @@ public enum BattlefieldPool {
         }
         //开始战斗
         if (!toJoin.isStart()) {
-            BattlefieldManager.INSTANCE.startBattle(toJoin.getFieldId());
+            startBattle(toJoin.getFieldId());
         }
         return info;
     }
 
-    public void leaveRoom(int roomId, long userId, int uid) {
+    public synchronized void leaveRoom(int roomId, long userId, int uid) {
         Battlefield room = roomAllList.get(roomId);
         room.removeUserObject(userId, uid);
         if (room.isEmpty()) {
-            BattlefieldManager.INSTANCE.endBattle(roomId);
+            endBattle(roomId);
             roomAllList.remove(room);
             roomFreeList.remove(room);
             freeRoomId.add(room.getFieldId());
@@ -57,7 +62,7 @@ public enum BattlefieldPool {
         }
     }
 
-    public Battlefield getRoomById(int roomId) {
+    public synchronized Battlefield getRoomById(int roomId) {
         if (isEmpty()) {
             return null;
         }
@@ -74,7 +79,7 @@ public enum BattlefieldPool {
     }
 
 
-    public boolean isEmpty() {
+    private boolean isEmpty() {
         if (roomAllList.size() == 0) {
             return true;
         }
@@ -98,5 +103,20 @@ public enum BattlefieldPool {
         roomFreeList.add(room);
     }
 
+    private boolean startBattle(int roomId) {
+        Battlefield room = getRoomById(roomId);
+        if (room.beginSend()) {
+            Future future = scheduledService.scheduleAtFixedRate(room, 0, GameConfig.BATTLE_SYNC_TIME, TimeUnit.MILLISECONDS);
+            battleFuture.put(roomId, future);
+            return true;
+        }
+        return false;
+    }
+
+    private void endBattle(int roomId) {
+        Battlefield room = getRoomById(roomId);
+        room.stopSend();
+        battleFuture.get(roomId).cancel(true);
+    }
 
 }

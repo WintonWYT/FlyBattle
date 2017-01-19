@@ -29,7 +29,7 @@ public class BlockPool {
         int hpNum = BattlefieldConfig.BLOCK_HP_NUM;
         int num = BattlefieldConfig.BLOCK_NUM;
         for (int i = 0; i < num; i++) {
-            Vec3 pos = nextBlockPosition(length, weight, height);
+            Vec3 pos = nextBlockPosition();
             EnergyBlock energyBlock = new EnergyBlock(i, pos);
             if (i < expNum) {
                 energyBlock.setType(BattlefieldConfig.BLOCK_EXP_CODE);
@@ -42,7 +42,7 @@ public class BlockPool {
         }
     }
 
-    private Vec3 nextBlockPosition(int length, int weight, int height) {
+    private Vec3 nextBlockPosition() {
         float x = random.nextInt(length);
         float y = random.nextInt(weight);
         float z = random.nextInt(height);
@@ -55,13 +55,13 @@ public class BlockPool {
         if (energyBlock.isUsed()) {
             return;
         }
-        Vec3 newPos = nextBlockPosition(length, weight, height);
+        Vec3 newPos = nextBlockPosition();
         energyBlock.setPos(newPos);
         energyBlock.setIsUsed(true);
         BlockChangeNotice.INSTANCE.noticeBlockChange(roomId, energyBlock);
     }
 
-    public List<EnergyBlock> getAllBlock() {
+    public synchronized List<EnergyBlock> getAllBlock() {
         List<EnergyBlock> result = new ArrayList<>();
         eBlockList.values().stream().filter(block -> !block.isUsed()).forEach(block -> result.add(block));
         return result;
