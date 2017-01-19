@@ -31,6 +31,8 @@ public class BattleCenter {
     @Command(OpCode.JOIN_ROOM_REQ)
     public EnterBattleResp handleJoinRoom(PlayerInfo info) {
         String uname = info.uname;
+        //校验是否已加入战斗
+        UserBattleManager.INSTANCE.getUserBattle(info.uid);
         info = BattleManager.INSTANCE.joinRoom(uname);
         UserBattle userBattle = new UserBattle();
         userBattle.setUid(info.uid);
