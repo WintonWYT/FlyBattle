@@ -33,7 +33,10 @@ public class BattleCenter {
         String uname = info.uname;
         //校验是否已加入战斗
         UserBattleManager.INSTANCE.getUserBattle(info.uid);
+
+
         info = BattleManager.INSTANCE.joinRoom(uname);
+
         UserBattle userBattle = new UserBattle();
         userBattle.setUid(info.uid);
         userBattle.setRoomId(info.roomId);
@@ -145,11 +148,15 @@ public class BattleCenter {
         ChannelManager.INSTANCE.sendResponse(uidList, OpCode.USER_LEAVE_ROOM, new PlayerExitResp(exitUid));
     }
 
-    public static void sendSyncAttack(List<Integer> uidList, AttackResp resp) {
+    public void sendSyncAttack(List<Integer> uidList, AttackResp resp) {
         ChannelManager.INSTANCE.sendResponse(uidList, OpCode.SYNC_ATTACK_RESP, resp);
     }
 
-    public static void sendSyncPosition(int uid, SyncResp response) {
+    public void sendSyncPosition(int uid, SyncResp response) {
         ChannelManager.INSTANCE.sendResponse(uid, OpCode.SYNC_BATTLE_RESP, response);
+    }
+
+    public void sendUpdateEnergyBlock(int roomId, UpdateBlockResp resp) {
+        //List<Integer> userList =
     }
 }

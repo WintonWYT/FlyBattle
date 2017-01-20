@@ -20,7 +20,7 @@ public enum BlockChangeNotice {
         noticeService.schedule(() -> sendBlockNotic(roomId, energyBlock), BUILD_TIME, TimeUnit.SECONDS);
     }
 
-    public void sendBlockNotic(int roomId, EnergyBlock block) {
+    private void sendBlockNotic(int roomId, EnergyBlock block) {
         block.setIsUsed(false);
         BattleExtension.SendUpdateBlockPos(roomId, block);
     }

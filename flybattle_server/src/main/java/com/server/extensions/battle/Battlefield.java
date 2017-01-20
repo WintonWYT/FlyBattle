@@ -116,7 +116,6 @@ public class Battlefield extends Thread {
     public int addObjct(Position pos) {
         objcetId2Postion.put(uid.incrementAndGet(), pos);
         return uid.get();
-
     }
 
 
@@ -146,8 +145,6 @@ public class Battlefield extends Thread {
             int uid = userId2Uid.get(userId);
             SyncResp response = new SyncResp();
             response.playerSynInfos = getSyncInfo(uid, damageInfos);
-
-            //待改,可以考虑抽象一个借口
             BattleExtension.sendSyncPosition(userId, response);
         }
 
@@ -211,10 +208,8 @@ public class Battlefield extends Thread {
         return otherUserList;
     }
 
-    //此方法是线程安全的
     public void addDamageInfo(DamageInfo damageInfo) {
-        int hp = uid2Hp.get(damageInfo.uid);
-        uid2Hp.put(damageInfo.uid, hp - damageInfo.reduceHp);
+        uid2Hp.computeIfPresent(damageInfo.uid, (k, v) -> (v - damageInfo.reduceHp));
         damageList.add(damageInfo);
     }
 

@@ -211,8 +211,7 @@ public class Battlefield extends Thread {
 
     //此方法是线程安全的
     public void addDamageInfo(DamageInfo damageInfo) {
-        int hp = uid2Hp.get(damageInfo.uid);
-        uid2Hp.put(damageInfo.uid, hp - damageInfo.reduceHp);
+        uid2Hp.computeIfPresent(damageInfo.uid, (k, v) -> (v - damageInfo.reduceHp));
         damageList.add(damageInfo);
     }
 
