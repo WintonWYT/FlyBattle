@@ -18,7 +18,8 @@ public class UserDao {
 
     private static final String ADD_USER = "INSERT INTO Users(userId,userName,userPwd) VALUES(?,?,?)";
     private static final String GET_USER_BY_ID = "SELECT * FROM Users WHERE userId = ?";
-    private static final String SET_USER_NAME = "UPDATE Users SET userName = ? WHERE userId = ?";
+    private static final String SET_USER_NAME = "UPDATE Users SET userName =? WHERE userId =?";
+    private static final String GET_USER_BY_NAME = "SELECT * FROM Users WHERE userName= ?";
 
     public int addUser(long userId, String userName, String userPwd) {
         return DbManager.getWorkDb().executeCommand(ADD_USER, new Object[]{userId, userName, userPwd});
@@ -28,8 +29,12 @@ public class UserDao {
         return DbManager.getWorkDb().executeScalarObject(GET_USER_BY_ID, new Object[]{userId}, USER_BUILDER); //.executeCommand(new Object[]{userId},USER_BUILDER);
     }
 
-    public int setUserName(long userId,String userName){
-        return DbManager.getWorkDb().executeCommand(SET_USER_NAME,new Object[]{userName,userId});
+    public int setUserName(long userId, String userName) {
+        User user = DbManager.getWorkDb().executeScalarObject(GET_USER_BY_NAME, new Object[]{userName}, USER_BUILDER);
+        if (user != null) {
+            return -1;
+        }
+        return DbManager.getWorkDb().executeCommand(SET_USER_NAME, new Object[]{userName, userId});
     }
 
     public static final ResultObjectBuilder<User> USER_BUILDER = rs -> {

@@ -7,7 +7,6 @@ import com.baitian.mobileserver.servercomponent.LoginResult;
 import com.baitian.mobileserver.util.ServerConfig;
 import com.server.extensions.common.LoginText;
 import com.server.extensions.config.ExtConfig;
-import com.server.extensions.rpc.server.RpcServiceServer;
 import com.server.extensions.user.User;
 import com.server.extensions.user.UserManager;
 import com.server.protobuf.response.LoginResp;
@@ -34,7 +33,7 @@ public class MyServerComponent implements IServerComponent {
 
     @Override
     public void afterExtensionInit() {
-        RpcServiceServer.INSTANCE.startService();
+        //RpcServiceServer.INSTANCE.startService();
     }
 
     @Override

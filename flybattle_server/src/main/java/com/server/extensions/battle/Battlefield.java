@@ -94,6 +94,7 @@ public class Battlefield extends Thread {
 
     public void removeUserObject(long userId, int uid) {
         userId2Uid.remove(userId);
+        uid2Hp.remove(uid);
         removeUserInfo(uid);
         removeObject(uid);
     }
@@ -108,7 +109,6 @@ public class Battlefield extends Thread {
 
     /**
      * 添加物体
-     * 非线程安全，需要注意
      *
      * @param pos
      * @return uid
@@ -199,7 +199,7 @@ public class Battlefield extends Thread {
     public List<Long> getOtherPlayerIdList(long userId) {
         Set<Long> userSet = userId2Uid.keySet();
         List<Long> otherUserList = new ArrayList<>(userSet.size() - 1);
-        for (Long id : userSet) {
+        for (long id : userSet) {
             if (id == userId) {
                 continue;
             }

@@ -63,32 +63,24 @@ public enum BattlefieldPool {
     }
 
     public synchronized Battlefield getRoomById(int roomId) {
-        if (isEmpty()) {
+        if (roomAllList.isEmpty()) {
             return null;
         }
         return roomAllList.get(roomId);
     }
 
     private Battlefield getValidRoom() {
-        Battlefield room;
-        if (roomFreeList.size() == 0) {
+        if (roomFreeList.isEmpty()) {
             creatRoom();
         }
-        room = roomFreeList.getFirst();
-        return room;
+        Battlefield validRoom = roomFreeList.getFirst();
+        return validRoom;
     }
 
-
-    private boolean isEmpty() {
-        if (roomAllList.size() == 0) {
-            return true;
-        }
-        return false;
-    }
 
     private void creatRoom() {
         int roomId;
-        if (freeRoomId.size() == 0) {
+        if (freeRoomId.isEmpty()) {
             roomId = size;
             size++;
             //待处理

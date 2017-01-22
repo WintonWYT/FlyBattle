@@ -7,7 +7,7 @@
             <InMsgWorkerThreads>10</InMsgWorkerThreads>
             <OutMsgWorkerThreads>3</OutMsgWorkerThreads>
             <ScheduledExecutorThreads>5</ScheduledExecutorThreads>
-            <EnableProfile>false</EnableProfile>
+            <EnableProfile>true</EnableProfile>
             <EnableMsgLengthDebug>true</EnableMsgLengthDebug>
             <EnableBigEndian>true</EnableBigEndian>
         </ServerSetup>

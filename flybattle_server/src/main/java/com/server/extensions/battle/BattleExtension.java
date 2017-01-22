@@ -69,7 +69,7 @@ public class BattleExtension extends ExtensionSupport {
         EnterBattleResp response = new EnterBattleResp();
         response.myInfo = info;
         response.otherInfo = battlefieldManager.getOtherPlayerInfoList(info.roomId, info.uid);
-        //response.energyBlockInfo = battlefieldManager.getAllEnergyBlock(info.roomId);
+        response.energyBlockInfo = battlefieldManager.getAllEnergyBlock(info.roomId);
         sendJoinRoomResp(user, response);
 
         List<Long> userList = battlefieldManager.getOtherPlayerIdList(info.roomId, userId);
@@ -163,7 +163,9 @@ public class BattleExtension extends ExtensionSupport {
         int uid = user.getUid();
 
         BattlefieldManager.INSTANCE.setLevel(roomId, uid, req.level);
+
         List<Long> userList = BattlefieldManager.INSTANCE.getOtherPlayerIdList(roomId, userId);
+
         LevelChangeResp resp = new LevelChangeResp();
         resp.level = req.level;
         resp.uid = user.getUid();
