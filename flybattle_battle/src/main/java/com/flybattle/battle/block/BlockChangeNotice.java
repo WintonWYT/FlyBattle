@@ -1,5 +1,6 @@
 package com.flybattle.battle.block;
 
+import com.flybattle.battle.core.BattleCenter;
 import com.flybattle.battle.util.BattlefieldConfig;
 
 import java.util.concurrent.Executors;
@@ -23,7 +24,8 @@ public enum BlockChangeNotice {
 
     private void sendBlockNotice(int roomId, EnergyBlock energyBlock) {
         energyBlock.setIsUsed(false);
-        //todo 添加返回信息
+
+        BattleCenter.getInstance().sendUpdateEnergyBlock(roomId, energyBlock);
 
     }
 }

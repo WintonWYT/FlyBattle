@@ -68,7 +68,7 @@ public enum BattlefieldPool {
     }
 
     public synchronized Battlefield getRoomById(int roomId) {
-        if (isEmpty()) {
+        if (roomAllList.isEmpty()) {
             return null;
         }
         return roomAllList.get(roomId);
@@ -76,7 +76,7 @@ public enum BattlefieldPool {
 
     private Battlefield getValidRoom() {
         Battlefield room;
-        if (freeRoomList.size() == 0) {
+        if (freeRoomList.isEmpty()) {
             creatRoom();
         }
         room = freeRoomList.getFirst();
@@ -84,16 +84,9 @@ public enum BattlefieldPool {
     }
 
 
-    private boolean isEmpty() {
-        if (roomAllList.size() == 0) {
-            return true;
-        }
-        return false;
-    }
-
     private void creatRoom() {
         int roomId;
-        if (freeRoomId.size() == 0) {
+        if (freeRoomId.isEmpty()) {
             roomId = size;
             size++;
             if (size > MAX_SIZE) {

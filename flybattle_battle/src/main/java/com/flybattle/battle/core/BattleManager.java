@@ -21,7 +21,7 @@ public enum BattleManager {
 
     public PlayerInfo joinRoom(String userName) {
         Vec3 pos = initPosition();
-        BattleInfo position = new BattleInfo(pos, null);
+        BattleInfo position = new BattleInfo(pos, new Vec3());
         PlayerInfo playInfo = battlefieldPool.joinRoom(userName, position);
         return playInfo;
     }

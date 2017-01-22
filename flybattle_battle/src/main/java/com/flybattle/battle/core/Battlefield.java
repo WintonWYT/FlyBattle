@@ -7,7 +7,6 @@ import com.flybattle.battle.util.BattlefieldConfig;
 import com.server.protobuf.DamageInfo;
 import com.server.protobuf.PlayerInfo;
 import com.server.protobuf.PlayerSynInfo;
-import com.server.protobuf.Vec3;
 import com.server.protobuf.response.SyncResp;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class Battlefield extends Thread {
     }
 
 
-    public int getRoomUsersNum() {
+    private int getRoomUsersNum() {
         return userUid.size();
     }
 
@@ -99,6 +98,7 @@ public class Battlefield extends Thread {
 
     public void removeUserObject(int uid) {
         userUid.remove(uid);
+        uid2Hp.remove(uid);
         removeUserInfo(uid);
         removeObject(uid);
     }
@@ -150,7 +150,7 @@ public class Battlefield extends Thread {
             SyncResp response = new SyncResp();
             response.playerSynInfos = getSyncInfo(uid, damageInfos);
 
-            BattleCenter.sendSyncPosition(uid, response);
+            BattleCenter.getInstance().sendSyncPosition(uid, response);
         }
 
     }
@@ -166,11 +166,6 @@ public class Battlefield extends Thread {
             synInfo.uid = id;
             BattleInfo position = objcetId2Postion.get(id);
             synInfo.pos = position.pos;
-            //待定
-            if (position.dir == null) {
-                position.dir = new Vec3();
-            }
-
             synInfo.dir = position.dir;
             synInfo.damage = getDemage(id, damageInfos);
             infos.add(synInfo);

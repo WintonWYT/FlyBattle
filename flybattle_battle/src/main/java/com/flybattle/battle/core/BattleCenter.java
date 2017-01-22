@@ -1,5 +1,6 @@
 package com.flybattle.battle.core;
 
+import com.flybattle.battle.block.EnergyBlock;
 import com.flybattle.battle.domain.BattleInfo;
 import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.domain.UserBattle;
@@ -7,6 +8,7 @@ import com.flybattle.battle.server.ChannelManager;
 import com.flybattle.battle.util.Command;
 import com.flybattle.battle.util.CommandHandler;
 import com.server.protobuf.DamageInfo;
+import com.server.protobuf.EnergyBlockInfo;
 import com.server.protobuf.PlayerInfo;
 import com.server.protobuf.Vec3;
 import com.server.protobuf.request.*;
@@ -90,7 +92,7 @@ public class BattleCenter {
         List<Integer> uidList = BattleManager.INSTANCE.getOtherUidList(roomId, uid);
         BattleManager.INSTANCE.leaveRoom(roomId, uid);
         UserBattleManager.INSTANCE.removeUserBattle(uid);
-        senLeaveRoomResp(uid);
+        sendLeaveRoomResp(uid);
         sendUserLeaveRoom(uidList, uid);
     }
 
@@ -136,7 +138,7 @@ public class BattleCenter {
     }
 
 
-    public void senLeaveRoomResp(int uid) {
+    public void sendLeaveRoomResp(int uid) {
         ChannelManager.INSTANCE.sendResponse(uid, OpCode.LEAVE_ROOM_RESP, null);
     }
 
@@ -156,7 +158,10 @@ public class BattleCenter {
         ChannelManager.INSTANCE.sendResponse(uid, OpCode.SYNC_BATTLE_RESP, response);
     }
 
-    public void sendUpdateEnergyBlock(int roomId, UpdateBlockResp resp) {
-        //List<Integer> userList =
+    public void sendUpdateEnergyBlock(int roomId, EnergyBlock block) {
+        List<Integer> userList = BattleManager.INSTANCE.getAllUid(roomId);
+        UpdateBlockResp resp = new UpdateBlockResp();
+        resp.energyBlockInfo = new EnergyBlockInfo(block.getEid(), block.getType(),block.getPos());
+        ChannelManager.INSTANCE.sendResponse(userList,OpCode.UPDATE_BLOCK_POS,resp);
     }
 }
