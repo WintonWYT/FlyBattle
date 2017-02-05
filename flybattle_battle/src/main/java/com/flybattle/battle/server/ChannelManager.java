@@ -45,9 +45,8 @@ public enum ChannelManager {
 
     private ByteBuf getByteBuf(int opCode, Object object) {
         ByteBuf buf = Unpooled.buffer();
-        buf.writeInt(opCode);
         try {
-            ProtobufCoder.encode(object, buf);
+            ProtobufCoder.encode(opCode,object, buf);
         } catch (Exception e) {
             e.printStackTrace();
         }

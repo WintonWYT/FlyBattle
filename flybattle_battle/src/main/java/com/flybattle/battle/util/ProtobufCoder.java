@@ -11,14 +11,17 @@ public class ProtobufCoder {
 
 
     @SuppressWarnings("unchecked")
-    public static void encode(Object obj, ByteBuf buffer) throws Exception {
+    public static void encode(int opCode, Object obj, ByteBuf buffer) throws Exception {
 
         if (obj == null) {
             buffer.writeInt(0);
             return;
         }
+
         Codec codec = ProtobufProxy.create(obj.getClass());
         int size = codec.size(obj);
+        buffer.writeInt(size + 8);
+        buffer.writeInt(opCode);
         buffer.writeInt(size);
         byte[] bytes = codec.encode(obj);
         buffer.writeBytes(bytes);
