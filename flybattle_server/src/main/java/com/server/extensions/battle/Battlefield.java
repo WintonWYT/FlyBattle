@@ -113,13 +113,13 @@ public class Battlefield extends Thread {
      * @param pos
      * @return uid
      */
-    public int addObjct(Position pos) {
+    private int addObjct(Position pos) {
         objcetId2Postion.put(uid.incrementAndGet(), pos);
         return uid.get();
     }
 
 
-    public void removeObject(int uid) {
+    private void removeObject(int uid) {
         objcetId2Postion.remove(uid);
     }
 
