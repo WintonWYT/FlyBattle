@@ -1,6 +1,6 @@
 package com.flybattle.battle.core;
 
-import com.flybattle.battle.block.EnergyBlock;
+import com.flybattle.battle.block.Block;
 import com.flybattle.battle.domain.BattleInfo;
 import com.flybattle.battle.domain.OpCode;
 import com.flybattle.battle.domain.UserBattle;
@@ -158,7 +158,7 @@ public class BattleCenter {
         ChannelManager.INSTANCE.sendResponse(uid, OpCode.SYNC_BATTLE_RESP, response);
     }
 
-    public void sendUpdateEnergyBlock(int roomId, EnergyBlock block) {
+    public void sendUpdateEnergyBlock(int roomId, Block block) {
         List<Integer> userList = BattleManager.INSTANCE.getAllUid(roomId);
         UpdateBlockResp resp = new UpdateBlockResp();
         resp.energyBlockInfo = new EnergyBlockInfo(block.getEid(), block.getType(),block.getPos());

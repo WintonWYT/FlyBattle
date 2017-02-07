@@ -1,7 +1,7 @@
 package com.flybattle.battle.core;
 
 import com.flybattle.battle.block.BlockPool;
-import com.flybattle.battle.block.EnergyBlock;
+import com.flybattle.battle.block.Block;
 import com.flybattle.battle.domain.BattleInfo;
 import com.flybattle.battle.util.BattlefieldConfig;
 import com.server.protobuf.DamageInfo;
@@ -215,7 +215,7 @@ public class Battlefield extends Thread {
         energyBlockPood.updateBlock(eid);
     }
 
-    public List<EnergyBlock> getAllBlcok() {
+    public List<Block> getAllBlcok() {
         return energyBlockPood.getAllBlock();
     }
 

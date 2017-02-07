@@ -18,14 +18,14 @@ public enum BlockChangeNotice {
 
     private ScheduledExecutorService noticeService = Executors.newScheduledThreadPool(THREAD_SIZE);
 
-    public void noticeBlockChange(int roomId, EnergyBlock energyBlock) {
-        noticeService.schedule(() -> sendBlockNotice(roomId, energyBlock), REBUILD_TIME, TimeUnit.SECONDS);
+    public void noticeBlockChange(int roomId, Block block) {
+        noticeService.schedule(() -> sendBlockNotice(roomId, block), REBUILD_TIME, TimeUnit.SECONDS);
     }
 
-    private void sendBlockNotice(int roomId, EnergyBlock energyBlock) {
-        energyBlock.setIsUsed(false);
+    private void sendBlockNotice(int roomId, Block block) {
+        block.setIsUsed(false);
 
-        BattleCenter.getInstance().sendUpdateEnergyBlock(roomId, energyBlock);
+        BattleCenter.getInstance().sendUpdateEnergyBlock(roomId, block);
 
     }
 }

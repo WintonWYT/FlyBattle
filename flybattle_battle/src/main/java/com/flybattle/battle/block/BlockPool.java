@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by wuyingtan on 2017/1/9.
  */
 public class BlockPool {
-    private Map<Integer, EnergyBlock> eBlockList = new ConcurrentHashMap<>();
+    private Map<Integer, Block> eBlockList = new ConcurrentHashMap<>();
     private Random random = new Random();
     private int length;
     private int weight;
@@ -30,15 +30,15 @@ public class BlockPool {
         int num = BattlefieldConfig.BLOCK_NUM;
         for (int i = 0; i < num; i++) {
             Vec3 pos = nextBlockPosition();
-            EnergyBlock energyBlock = new EnergyBlock(i, pos);
+            Block block = new Block(i, pos);
             if (i < expNum) {
-                energyBlock.setType(BattlefieldConfig.BLOCK_EXP_CODE);
+                block.setType(BattlefieldConfig.BLOCK_EXP_CODE);
             } else if (i < expNum + hpNum) {
-                energyBlock.setType(BattlefieldConfig.BLOCK_HP_CODE);
+                block.setType(BattlefieldConfig.BLOCK_HP_CODE);
             } else {
-                energyBlock.setType(BattlefieldConfig.BLOCK_TOOL_CODE);
+                block.setType(BattlefieldConfig.BLOCK_TOOL_CODE);
             }
-            eBlockList.put(i, energyBlock);
+            eBlockList.put(i, block);
         }
     }
 
@@ -51,18 +51,18 @@ public class BlockPool {
 
 
     public synchronized void updateBlock(int eid) {
-        EnergyBlock energyBlock = eBlockList.get(eid);
-        if (energyBlock.isUsed()) {
+        Block block = eBlockList.get(eid);
+        if (block.isUsed()) {
             return;
         }
         Vec3 newPos = nextBlockPosition();
-        energyBlock.setPos(newPos);
-        energyBlock.setIsUsed(true);
-        BlockChangeNotice.INSTANCE.noticeBlockChange(roomId, energyBlock);
+        block.setPos(newPos);
+        block.setIsUsed(true);
+        BlockChangeNotice.INSTANCE.noticeBlockChange(roomId, block);
     }
 
-    public synchronized List<EnergyBlock> getAllBlock() {
-        List<EnergyBlock> result = new ArrayList<>();
+    public synchronized List<Block> getAllBlock() {
+        List<Block> result = new ArrayList<>();
         eBlockList.values().stream().filter(block -> !block.isUsed()).forEach(block -> result.add(block));
         return result;
     }

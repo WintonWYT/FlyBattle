@@ -38,7 +38,7 @@ public enum BattlefieldManager {
         if (room == null) {
             return new ArrayList<>();
         }
-        List<EnergyBlock> blocks = room.getAllBlcok();
+        List<Block> blocks = room.getAllBlcok();
         List<EnergyBlockInfo> blockInfos = new ArrayList<>();
         blocks.forEach(block -> blockInfos.add(new EnergyBlockInfo(block.getEid(), block.getType(), block.getPos())));
         return blockInfos;

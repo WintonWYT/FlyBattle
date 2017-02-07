@@ -9,7 +9,7 @@ import java.util.*;
  * Created by wuyingtan on 2017/1/9.
  */
 public class BlockPool {
-    private Map<Integer, EnergyBlock> eBlockList = new HashMap<>();
+    private Map<Integer, Block> eBlockList = new HashMap<>();
     //random类是否可靠
     private Random random = new Random();
     private int length;
@@ -28,15 +28,15 @@ public class BlockPool {
         this.roomId = roomId;
         for (int i = 0; i < num; i++) {
             Vec3 pos = nextBlockPosition();
-            EnergyBlock energyBlock = new EnergyBlock(i, pos);
+            Block block = new Block(i, pos);
             if (i < expNum) {
-                energyBlock.setType(GameConfig.BLOCK_EXP_CODE);
+                block.setType(GameConfig.BLOCK_EXP_CODE);
             } else if (i < expNum + hpNum) {
-                energyBlock.setType(GameConfig.BLOCK_HP_CODE);
+                block.setType(GameConfig.BLOCK_HP_CODE);
             } else {
-                energyBlock.setType(GameConfig.BLOCK_TOOL_CODE);
+                block.setType(GameConfig.BLOCK_TOOL_CODE);
             }
-            eBlockList.put(i, energyBlock);
+            eBlockList.put(i, block);
         }
     }
 
@@ -48,18 +48,18 @@ public class BlockPool {
     }
 
     public synchronized void updateBlock(int eid) {
-        EnergyBlock energyBlock = eBlockList.get(eid);
-        if (energyBlock.isUsed()) {
+        Block block = eBlockList.get(eid);
+        if (block.isUsed()) {
             return;
         }
         Vec3 newPos = nextBlockPosition();
-        energyBlock.setPos(newPos);
-        energyBlock.setIsUsed(true);
-        BlockChangeNotice.INSTANCE.noticeBlockChange(roomId, energyBlock);
+        block.setPos(newPos);
+        block.setIsUsed(true);
+        BlockChangeNotice.INSTANCE.noticeBlockChange(roomId, block);
     }
 
-    public synchronized List<EnergyBlock> getAllBlcok() {
-        List<EnergyBlock> result = new ArrayList<>();
+    public synchronized List<Block> getAllBlcok() {
+        List<Block> result = new ArrayList<>();
         eBlockList.values().stream().filter(block -> !block.isUsed()).forEach(block -> result.add(block));
         return result;
     }

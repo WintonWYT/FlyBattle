@@ -1,17 +1,18 @@
-package com.flybattle.battle.block;
+package com.server.extensions.battle;
 
 import com.server.protobuf.Vec3;
 
 /**
  * Created by wuyingtan on 2017/1/9.
  */
-public class EnergyBlock {
+//能量块状态的逻辑需要实时同步
+public class Block {
     private int eid;
     private Vec3 pos;
     private boolean isUsed;
     private int type;
 
-    public EnergyBlock(int eid, Vec3 pos) {
+    public Block(int eid, Vec3 pos) {
         this.eid = eid;
         this.pos = pos;
         this.isUsed = false;

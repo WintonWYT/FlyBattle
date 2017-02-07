@@ -16,11 +16,11 @@ public enum BlockChangeNotice {
     private static final long BUILD_TIME = GameConfig.BLOCK_RESET_TIME;
     private ScheduledExecutorService noticeService = Executors.newScheduledThreadPool(size);
 
-    public void noticeBlockChange(int roomId, EnergyBlock energyBlock) {
-        noticeService.schedule(() -> sendBlockNotic(roomId, energyBlock), BUILD_TIME, TimeUnit.SECONDS);
+    public void noticeBlockChange(int roomId, Block block) {
+        noticeService.schedule(() -> sendBlockNotic(roomId, block), BUILD_TIME, TimeUnit.SECONDS);
     }
 
-    private void sendBlockNotic(int roomId, EnergyBlock block) {
+    private void sendBlockNotic(int roomId, Block block) {
         block.setIsUsed(false);
         BattleExtension.SendUpdateBlockPos(roomId, block);
     }

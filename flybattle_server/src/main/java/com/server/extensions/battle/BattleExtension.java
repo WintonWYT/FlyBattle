@@ -179,7 +179,7 @@ public class BattleExtension extends ExtensionSupport {
         BattlefieldManager.INSTANCE.updateEnergyBlock(roomId, eid);
     }
 
-    public static void SendUpdateBlockPos(int roomId, EnergyBlock block) {
+    public static void SendUpdateBlockPos(int roomId, Block block) {
         List<Long> userIdList = BattlefieldManager.INSTANCE.getAllUserList(roomId);
         List<User> userList = getUserListById(userIdList);
         UpdateBlockResp resp = new UpdateBlockResp();

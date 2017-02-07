@@ -231,7 +231,7 @@ public class Battlefield extends Thread {
         energyBlockPood.updateBlock(eid);
     }
 
-    public List<EnergyBlock> getAllBlcok() {
+    public List<Block> getAllBlcok() {
         return energyBlockPood.getAllBlcok();
     }
 }

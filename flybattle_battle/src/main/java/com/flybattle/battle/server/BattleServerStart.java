@@ -1,6 +1,7 @@
 package com.flybattle.battle.server;
 
 import com.flybattle.battle.core.BattleCenter;
+import com.flybattle.battle.task.TaskWokerCenter;
 import com.flybattle.battle.util.BattleConfig;
 import com.flybattle.battle.util.BattleLogger;
 import com.flybattle.battle.util.LogUtil;
@@ -43,7 +44,7 @@ public class BattleServerStart {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast("FrameDecoder",new LengthFieldBasedFrameDecoder(1024, 0, 4, 0, 4));
+                        ch.pipeline().addLast("FrameDecoder", new LengthFieldBasedFrameDecoder(1024, 0, 4, 0, 4));
                         ch.pipeline().addLast(new BattleHandler());
                     }
                 });
@@ -56,8 +57,13 @@ public class BattleServerStart {
         } finally {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
+            shutdown();
             BattleLogger.info("Battle Server shutdown!");
         }
+    }
+
+    private void shutdown() {
+        TaskWokerCenter.INSTANCE.shutDown();
     }
 
     public static void main(String[] args) {

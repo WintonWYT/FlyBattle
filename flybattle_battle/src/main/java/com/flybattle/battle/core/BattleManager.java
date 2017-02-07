@@ -1,6 +1,6 @@
 package com.flybattle.battle.core;
 
-import com.flybattle.battle.block.EnergyBlock;
+import com.flybattle.battle.block.Block;
 import com.flybattle.battle.domain.BattleInfo;
 import com.server.protobuf.DamageInfo;
 import com.server.protobuf.EnergyBlockInfo;
@@ -44,7 +44,7 @@ public enum BattleManager {
         if (room == null) {
             return new ArrayList<>();
         }
-        List<EnergyBlock> blocks = room.getAllBlcok();
+        List<Block> blocks = room.getAllBlcok();
         List<EnergyBlockInfo> blockInfos = new ArrayList<>();
         blocks.forEach(block -> blockInfos.add(new EnergyBlockInfo(block.getEid(), block.getType(), block.getPos())));
         return blockInfos;
